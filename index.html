@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="sticker">
+  <title>Desafío Estadístico: Datos y Tablas de Frecuencias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Sticker style tokens */
+      --background: #fef7ff;
+      --surface-container-low: #ffffff;
+      --surface-container: #f8eef8;
+      --surface-container-high: #f2e8f2;
+
+      --on-surface: #2e1a28;
+      --on-surface-variant: #604868;
+
+      --outline: #907898;
+      --outline-variant: #dcc8e0;
+
+      --primary: #c2207f;
+      --on-primary: #ffffff;
+      --primary-container: #f080c0;
+      --on-primary-container: #2e1a28;
+      --secondary: #7c52aa;
+      --on-secondary: #ffffff;
+      --tertiary: #0096cc;
+      --error: #c53030;
+      --on-error: #ffffff;
+
+      --data-1: #c2207f;
+      --data-2: #7c52aa;
+      --data-3: #0096cc;
+      --data-4: #d96a00;
+      --data-context: #c8b8d0;
+
+      --font-headline: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-label: 'DM Sans', sans-serif;
+
+      --rounded: 1rem;
+      --rounded-lg: 2rem;
+      --rounded-full: 9999px;
+
+      --shadow-pink: 0 4px 16px rgb(224 64 160 / 0.2);
+      --shadow-pink-deep: 0 10px 28px rgb(224 64 160 / 0.32);
+      --shadow-grape: 0 4px 16px rgb(124 82 170 / 0.2);
+      --shadow-grape-deep: 0 10px 28px rgb(124 82 170 / 0.32);
+      --shadow-sky: 0 4px 16px rgb(0 150 204 / 0.2);
+      --shadow-error: 0 4px 16px rgb(197 48 48 / 0.22);
+      --shadow-positive: 0 4px 16px rgb(21 127 75 / 0.22);
+      --pop-scale: scale(1.03);
+      --lift: translateY(-4px);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* 2. Shared semantic, scale, spacing, and motion tokens */
+      --positive: #157f4b;
+      --on-positive: #ffffff;
+      --positive-container: #e6f7ee;
+      --on-positive-container: #0e5230;
+      --warning: #b45309;
+      --warning-container: #fff4db;
+      --on-warning-container: #78350f;
+      --error-container: #fdecec;
+      --on-error-container: #821717;
+      --secondary-container: #efe5fa;
+      --on-secondary-container: #4a2a70;
+
+      --focus: #c2207f;
+
+      --display-size: clamp(1.85rem, 1.35rem + 1.8vw, 2.65rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.55vw, 1.55rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.2rem);
+      --body-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
+      --label-size: 0.75rem;
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1080px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Top Bar */
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-xs);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+    }
+
+    .tag-grape {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+      background: var(--surface-container-low);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--rounded-full);
+      border: none;
+      font-size: var(--body-size);
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform var(--dur-short) var(--ease-bounce),
+                  box-shadow var(--dur-short) var(--ease-out),
+                  background-color var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover:not(:disabled) { transform: var(--pop-scale); }
+    .btn:active:not(:disabled) { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--shadow-pink);
+    }
+    .btn-primary:hover:not(:disabled) { box-shadow: var(--shadow-pink-deep); }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--on-secondary);
+      box-shadow: var(--shadow-grape);
+    }
+    .btn-secondary:hover:not(:disabled) { box-shadow: var(--shadow-grape-deep); }
+
+    .btn-pill-soft {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--shadow-grape);
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+    }
+
+    .btn-quiet {
+      background: transparent;
+      color: var(--primary);
+      padding: var(--space-xs) var(--space-md);
+    }
+    .btn-quiet:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+
+    /* Typography */
+    .display {
+      font-family: var(--font-headline);
+      font-weight: 900;
+      font-size: var(--display-size);
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .display em {
+      font-style: normal;
+      color: var(--primary);
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--headline-size);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--primary);
+    }
+
+    .kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    .lede {
+      color: var(--on-surface-variant);
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+      max-width: 60ch;
+      margin: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow-pink);
+      padding: var(--space-lg);
+      container-type: inline-size;
+    }
+    .card-lg {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow-pink);
+      padding: var(--space-xl);
+      container-type: inline-size;
+    }
+    .card-sky { box-shadow: var(--shadow-sky); }
+    .card-grape { box-shadow: var(--shadow-grape); }
+
+    /* Views */
+    .view-section {
+      display: none;
+      animation: cardEnter var(--dur-long) var(--ease-bounce) both;
+    }
+    .view-section.active { display: block; }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Welcome Layout (Asymmetric 2-col) */
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .welcome-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .input-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--on-surface);
+    }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--space-md);
+    }
+
+    .pill-input {
+      flex: 1 1 220px;
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--rounded-full);
+      border: 2px solid var(--outline);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-size: var(--body-size);
+      font-weight: 600;
+      transition: border-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .pill-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-container);
+    }
+    .pill-input.input-error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px var(--error-container);
+    }
+
+    .inline-msg {
+      min-height: 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--error);
+      margin: 0;
+    }
+
+    .topic-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .topic-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-radius: var(--rounded-full);
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .rules-list {
+      display: grid;
+      gap: var(--space-md);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .rule-icon {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--rounded-full);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-container);
+      color: var(--primary);
+    }
+    .rule-icon.grape { color: var(--secondary); background: var(--secondary-container); }
+    .rule-icon.sky { color: var(--on-surface); background: var(--surface-container-high); }
+
+    .history-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      background: var(--surface-container);
+      border-radius: var(--rounded-full);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Quiz Layout (Asymmetric 2-col) */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.85fr) minmax(240px, 0.95fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .quiz-main {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      position: relative;
+    }
+
+    .quiz-rail {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    /* Progress Bar */
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-sm);
+    }
+    .progress-track {
+      width: 100%;
+      height: 14px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 10%;
+      background: var(--tertiary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-long) var(--ease-bounce);
+    }
+
+    /* Question Card internals */
+    .question-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-md);
+    }
+
+    .question-prompt {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem);
+      line-height: 1.3;
+      letter-spacing: -0.015em;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-md) 0;
+    }
+
+    /* Visual Stimulus Well (tables & bar charts inside question) */
+    .stimulus-well {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+      overflow-x: auto;
+    }
+    .stimulus-caption {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-sm) 0;
+    }
+
+    .freq-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.9rem;
+    }
+    .freq-table th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      text-align: left;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--surface-container-high);
+    }
+    .freq-table th:first-child { border-radius: var(--rounded-full) 0 0 var(--rounded-full); padding-left: var(--space-md); }
+    .freq-table th:last-child { border-radius: 0 var(--rounded-full) var(--rounded-full) 0; padding-right: var(--space-md); }
+    .freq-table td {
+      padding: var(--space-xs) var(--space-sm);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .freq-table td:first-child { padding-left: var(--space-md); }
+    .freq-table td:last-child { padding-right: var(--space-md); }
+    .freq-table tbody tr:nth-child(even) td {
+      background: var(--surface-container-low);
+    }
+    .freq-table tfoot td {
+      font-weight: 800;
+      color: var(--primary);
+      padding-top: var(--space-sm);
+    }
+    .num-col { text-align: right; }
+
+    /* SVG Lollipop Bar Chart */
+    .bar-chart-wrap {
+      width: 100%;
+      min-height: 190px;
+    }
+    .bar-chart-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+    .chart-gridline {
+      stroke: var(--outline-variant);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .chart-axis-text {
+      font-family: var(--font-label);
+      font-size: 11px;
+      font-weight: 600;
+      fill: var(--on-surface-variant);
+    }
+    .chart-val-text {
+      font-family: var(--font-label);
+      font-size: 12px;
+      font-weight: 800;
+      fill: var(--on-surface);
+    }
+    .bar-series-1 { fill: var(--data-1); }
+    .bar-series-2 { fill: var(--data-2); }
+    .bar-series-3 { fill: var(--data-3); }
+    .bar-series-4 { fill: var(--data-4); }
+
+    /* Options Grid */
+    .options-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+
+    .option-btn {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      text-align: left;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--rounded-lg);
+      border: 2px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: var(--body-size);
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform var(--dur-short) var(--ease-bounce),
+                  background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-short) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      transform: var(--lift);
+      border-color: var(--primary);
+      background: var(--surface-container);
+      box-shadow: var(--shadow-pink);
+    }
+    .option-btn:active:not(:disabled) { transform: scale(0.985); }
+    .option-btn:disabled { cursor: default; }
+
+    .option-key {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container);
+      color: var(--secondary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .option-text {
+      flex: 1 1 auto;
+      line-height: 1.4;
+    }
+
+    .option-status {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .option-btn.is-correct {
+      background: var(--positive-container);
+      border-color: var(--positive);
+      color: var(--on-positive-container);
+      box-shadow: var(--shadow-positive);
+    }
+    .option-btn.is-correct .option-key {
+      background: var(--positive);
+      color: var(--on-positive);
+    }
+
+    .option-btn.is-wrong {
+      background: var(--error-container);
+      border-color: var(--error);
+      color: var(--on-error-container);
+      box-shadow: var(--shadow-error);
+    }
+    .option-btn.is-wrong .option-key {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    .option-btn.is-dimmed {
+      opacity: 0.62;
+    }
+
+    /* Pedagogical Feedback Panel */
+    .feedback-panel {
+      margin-top: var(--space-lg);
+      padding: var(--space-lg);
+      border-radius: var(--rounded);
+      display: none;
+      animation: popIn var(--dur-short) var(--ease-bounce) both;
+    }
+    .feedback-panel.visible { display: block; }
+    .feedback-panel.correct {
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+    }
+    .feedback-panel.wrong {
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+
+    .feedback-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-sm);
+    }
+    .feedback-title {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-weight: 800;
+      font-size: var(--subhead-size);
+      margin: 0;
+    }
+    .feedback-body {
+      margin: 0 0 var(--space-md) 0;
+      line-height: 1.55;
+      max-width: 65ch;
+    }
+
+    .feedback-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .kbd-hint {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      opacity: 0.8;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Streak Banner & Confetti */
+    .streak-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded-full);
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--shadow-pink-deep);
+      font-weight: 800;
+      font-size: var(--subhead-size);
+      animation: streakBounce var(--dur-long) var(--ease-bounce) both;
+    }
+    .streak-banner.visible { display: flex; }
+
+    @keyframes streakBounce {
+      0% { opacity: 0; transform: scale(0.75) translateY(-10px); }
+      65% { opacity: 1; transform: scale(1.05) translateY(0); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 50;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: var(--rounded-full);
+      opacity: 0;
+      animation: confettiDrop 1.35s var(--ease-out) forwards;
+    }
+    .confetti-piece.pink { background: var(--data-1); }
+    .confetti-piece.grape { background: var(--data-2); }
+    .confetti-piece.sky { background: var(--data-3); }
+    .confetti-piece.tangerine { background: var(--data-4); }
+    .confetti-piece.pill { width: 18px; height: 9px; }
+
+    @keyframes confettiDrop {
+      0% {
+        opacity: 1;
+        transform: translate3d(0, -20px, 0) rotate(0deg) scale(0.8);
+      }
+      80% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift-x, 40px), 78vh, 0) rotate(540deg) scale(1);
+      }
+    }
+
+    /* Rail Stat Cards */
+    .stat-figure {
+      font-family: var(--font-headline);
+      font-weight: 900;
+      font-size: clamp(1.85rem, 1.5rem + 1vw, 2.35rem);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0;
+    }
+    .stat-figure.pink { color: var(--primary); }
+    .stat-figure.grape { color: var(--secondary); }
+
+    .streak-dots {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+    .streak-dot {
+      flex: 1 1 0;
+      height: 12px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container-high);
+      transition: background-color var(--dur-short) var(--ease-out),
+                  transform var(--dur-short) var(--ease-bounce);
+    }
+    .streak-dot.lit {
+      background: var(--primary);
+      transform: scaleY(1.2);
+    }
+    .streak-dot.lit-grape {
+      background: var(--secondary);
+      transform: scaleY(1.2);
+    }
+
+    .mini-tracker {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+    }
+    .mini-pip {
+      height: 28px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .mini-pip.current {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .mini-pip.ok {
+      background: var(--positive);
+      color: var(--on-positive);
+    }
+    .mini-pip.bad {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    /* Results Screen */
+    .results-top-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: stretch;
+      margin-bottom: var(--space-lg);
+    }
+
+    .stat-pair {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .stat-well {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+    }
+
+    .topic-bars {
+      display: grid;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .topic-bar-row {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .topic-bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .topic-bar-track {
+      height: 12px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+    }
+    .topic-bar-fill {
+      height: 100%;
+      border-radius: var(--rounded-full);
+      background: var(--data-1);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+    .topic-bar-fill.s2 { background: var(--data-2); }
+    .topic-bar-fill.s3 { background: var(--data-3); }
+    .topic-bar-fill.s4 { background: var(--data-4); }
+
+    /* Review List */
+    .review-list {
+      display: grid;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .review-item {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow-sky);
+      padding: var(--space-lg);
+    }
+    .review-item.is-ok { box-shadow: var(--shadow-positive); }
+    .review-item.is-bad { box-shadow: var(--shadow-error); }
+
+    .review-item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-xs);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-pill.ok {
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+    }
+    .status-pill.bad {
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+
+    .source-note {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin: var(--space-md) 0 0 0;
+    }
+
+    /* Container queries for internal adaptation */
+    @container (max-width: 480px) {
+      .card-lg { padding: var(--space-lg); }
+      .option-btn { padding: var(--space-sm) var(--space-md); }
+    }
+
+    /* Mobile breakpoint */
+    @media (max-width: 760px) {
+      .welcome-grid,
+      .quiz-grid,
+      .results-top-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .card-lg, .card {
+        padding: var(--space-md);
+      }
+      .input-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn { width: 100%; }
+      .topbar .btn { width: auto; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .confetti-layer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
+
+  <div class="page-grid">
+    <header class="topbar">
+      <div class="brand-group">
+        <span class="badge">
+          <i data-lucide="bar-chart-3" style="width:15px;height:15px;" aria-hidden="true"></i>
+          Estadística · 7.º Año
+        </span>
+        <span class="tag-grape" id="player-pill" style="display:none;">
+          <i data-lucide="user" style="width:14px;height:14px;" aria-hidden="true"></i>
+          <span id="player-pill-name">Estudiante</span>
+        </span>
+      </div>
+      <div class="topbar-actions">
+        <button type="button" class="btn btn-pill-soft" id="sound-toggle-btn" onclick="toggleSound()" aria-pressed="true">
+          <i data-lucide="volume-2" id="sound-icon" style="width:16px;height:16px;" aria-hidden="true"></i>
+          <span id="sound-label">Sonido activo</span>
+        </button>
+        <button type="button" class="btn btn-quiet" id="home-btn" onclick="returnToWelcome()" style="display:none;">
+          <i data-lucide="home" style="width:16px;height:16px;" aria-hidden="true"></i>
+          Inicio
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- PANTALLA 1: BIENVENIDA -->
+      <section id="view-welcome" class="view-section active" aria-labelledby="welcome-title">
+        <div class="welcome-grid">
+          <div class="welcome-stack">
+            <div class="card-lg">
+              <p class="kicker">Práctica interactiva · 10 preguntas aleatorias</p>
+              <h1 class="display" id="welcome-title" style="margin-top: var(--space-sm);">
+                Domina los datos y las <em>frecuencias</em>
+              </h1>
+              <p class="lede" style="margin-top: var(--space-md);">
+                Pon a prueba lo que sabes sobre encuestas, datos discretos y continuos, tablas de frecuencias y diagramas de barras. Cada ronda mezcla preguntas nuevas del banco.
+              </p>
+
+              <form id="welcome-form" onsubmit="handleStartSubmit(event)" style="margin-top: var(--space-xl);" novalidate>
+                <div class="input-group">
+                  <label for="student-name-input" class="input-label">Tu nombre o apodo para personalizar el reto</label>
+                  <div class="input-row">
+                    <input
+                      type="text"
+                      id="student-name-input"
+                      class="pill-input"
+                      maxlength="32"
+                      autocomplete="name"
+                      oninput="clearNameError()"
+                    >
+                    <button type="submit" class="btn btn-primary" id="start-quiz-btn">
+                      <i data-lucide="play" style="width:18px;height:18px;" aria-hidden="true"></i>
+                      Comenzar desafío
+                    </button>
+                  </div>
+                  <p id="name-error-msg" class="inline-msg" role="alert"></p>
+                </div>
+              </form>
+
+              <div style="margin-top: var(--space-lg);">
+                <p class="kicker" style="margin-bottom: var(--space-sm);">Temas que practicarás en esta ronda</p>
+                <ul class="topic-pills">
+                  <li class="topic-chip">Preguntas en encuestas</li>
+                  <li class="topic-chip">Datos discretos vs. continuos</li>
+                  <li class="topic-chip">Frecuencia absoluta y acumulada</li>
+                  <li class="topic-chip">Frecuencia relativa (suma = 1)</li>
+                  <li class="topic-chip">Diagramas de barras y medios</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="welcome-stack">
+            <div class="card card-grape">
+              <p class="kicker">Cómo funciona el juego</p>
+              <h2 class="section-title" style="margin-top: var(--space-xs); margin-bottom: var(--space-md);">
+                Reglas del <em>desafío</em>
+              </h2>
+              <ul class="rules-list">
+                <li class="rule-item">
+                  <span class="rule-icon" aria-hidden="true">
+                    <i data-lucide="flame" style="width:18px;height:18px;"></i>
+                  </span>
+                  <div>
+                    <strong>Sistema de rachas:</strong> Acertar 3 preguntas seguidas activa una celebración especial y el aviso de racha.
+                  </div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-icon grape" aria-hidden="true">
+                    <i data-lucide="shuffle" style="width:18px;height:18px;"></i>
+                  </span>
+                  <div>
+                    <strong>Banco aleatorio:</strong> Se seleccionan 10 de 22 preguntas y se mezclan las opciones en cada intento.
+                  </div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-icon sky" aria-hidden="true">
+                    <i data-lucide="book-open" style="width:18px;height:18px;"></i>
+                  </span>
+                  <div>
+                    <strong>Explicación inmediata:</strong> Después de cada respuesta verás el porqué paso a paso, con ejemplos reales.
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card card-sky" id="history-card">
+              <p class="kicker">Tu progreso guardado</p>
+              <h2 class="section-title" style="margin-top: var(--space-xs); margin-bottom: var(--space-sm);">
+                Intentos recientes
+              </h2>
+              <div id="history-container">
+                <p style="margin:0; color: var(--on-surface-variant);">
+                  Aún no has completado una ronda. Escribe tu nombre para registrar tu primer puntaje.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANTALLA 2: CUESTIONARIO ACTIVO -->
+      <section id="view-quiz" class="view-section" aria-labelledby="question-prompt-heading">
+        <div class="quiz-grid">
+          <div class="quiz-main">
+            <!-- Aviso festivo de racha -->
+            <div id="streak-banner" class="streak-banner" role="status" aria-live="polite">
+              <span id="streak-banner-text">¡Racha de 3 aciertos! 🔥</span>
+              <span class="badge" style="background: var(--surface-container-low); color: var(--primary);">+Bonus de racha</span>
+            </div>
+
+            <!-- Barra de progreso -->
+            <div class="card card-sky" style="padding: var(--space-md) var(--space-lg);">
+              <div class="progress-header">
+                <span class="kicker" id="progress-label">Pregunta 1 de 10</span>
+                <span class="kicker" id="greeting-label" style="color: var(--secondary);">¡Tú puedes!</span>
+              </div>
+              <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="10" aria-valuenow="1" id="quiz-progressbar">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+            </div>
+
+            <!-- Tarjeta principal de pregunta -->
+            <article class="card-lg" id="question-card">
+              <div class="question-meta">
+                <span class="badge" id="question-topic-badge">Tema</span>
+                <span class="tag-grape" id="question-num-tag">#01</span>
+              </div>
+
+              <h2 class="question-prompt" id="question-prompt-heading"></h2>
+
+              <!-- Estímulo visual opcional (tabla o diagrama de barras) -->
+              <div id="question-stimulus" class="stimulus-well" style="display:none;"></div>
+
+              <!-- Opciones -->
+              <div id="options-container" class="options-list" role="group" aria-label="Opciones de respuesta"></div>
+
+              <!-- Retroalimentación pedagógica -->
+              <div id="feedback-panel" class="feedback-panel" aria-live="polite">
+                <div class="feedback-head">
+                  <p class="feedback-title" id="feedback-title"></p>
+                </div>
+                <p class="feedback-body" id="feedback-explanation"></p>
+                <div class="feedback-actions">
+                  <span class="kbd-hint">Atajo: teclas 1–4 para responder · Enter para avanzar</span>
+                  <button type="button" class="btn btn-primary" id="next-question-btn" onclick="nextQuestion()">
+                    <span id="next-btn-label">Siguiente pregunta</span>
+                    <i data-lucide="arrow-right" style="width:18px;height:18px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Panel lateral de gamificación -->
+          <aside class="quiz-rail" aria-label="Marcador del desafío">
+            <div class="card card-grape">
+              <p class="kicker">Racha actual</p>
+              <div class="stat-figure pink" id="rail-streak-val">0</div>
+              <p style="margin:0; font-size:0.875rem; color: var(--on-surface-variant);" id="rail-streak-hint">
+                Faltan 3 aciertos seguidos para tu primera racha.
+              </p>
+              <div class="streak-dots" aria-hidden="true">
+                <div class="streak-dot" id="sdot-1"></div>
+                <div class="streak-dot" id="sdot-2"></div>
+                <div class="streak-dot" id="sdot-3"></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="kicker">Puntaje acumulado</p>
+              <div class="stat-figure grape" id="rail-score-val">0 / 10</div>
+              <p style="margin:0; font-size:0.875rem; color: var(--on-surface-variant);">
+                Mejor racha: <strong id="rail-best-streak">0</strong> aciertos
+              </p>
+            </div>
+
+            <div class="card card-sky">
+              <p class="kicker">Mapa de preguntas</p>
+              <div class="mini-tracker" id="mini-tracker"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- PANTALLA 3: RESULTADOS FINALES -->
+      <section id="view-results" class="view-section" aria-labelledby="results-title">
+        <div class="results-top-grid">
+          <div class="card-lg">
+            <p class="kicker" id="results-kicker">Desafío completado</p>
+            <h1 class="display" id="results-title" style="margin-top: var(--space-xs);">
+              ¡Excelente trabajo, <em>Estudiante</em>!
+            </h1>
+            <p class="lede" id="results-verdict" style="margin-top: var(--space-md);"></p>
+
+            <div class="stat-pair">
+              <div class="stat-well">
+                <p class="kicker">Puntaje final</p>
+                <div class="stat-figure pink" id="final-score-val">0 / 10</div>
+                <p style="margin:0; font-size:0.875rem; color: var(--on-surface-variant);" id="final-pct-label">0% de aciertos</p>
+              </div>
+              <div class="stat-well">
+                <p class="kicker">Mejor racha</p>
+                <div class="stat-figure grape" id="final-streak-val">0 🔥</div>
+                <p style="margin:0; font-size:0.875rem; color: var(--on-surface-variant);" id="final-streak-note">Aciertos consecutivos</p>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap: var(--space-md); margin-top: var(--space-xl);">
+              <button type="button" class="btn btn-primary" onclick="restartQuiz()">
+                <i data-lucide="rotate-ccw" style="width:18px;height:18px;" aria-hidden="true"></i>
+                Reiniciar con nuevas preguntas
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="returnToWelcome()">
+                <i data-lucide="user-pen" style="width:18px;height:18px;" aria-hidden="true"></i>
+                Cambiar de alumno
+              </button>
+            </div>
+          </div>
+
+          <div class="card card-grape">
+            <p class="kicker">Desempeño por tema</p>
+            <h2 class="section-title" style="margin-top: var(--space-xs);">Resumen temático</h2>
+            <div class="topic-bars" id="topic-breakdown"></div>
+            <p class="source-note">
+              Basado en los contenidos de Estadística 7.º Año (encuestas, datos discretos y continuos, tablas de frecuencias y diagramas de barras).
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-top: var(--space-xl);">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap: var(--space-md); flex-wrap:wrap; margin-bottom: var(--space-md);">
+            <div>
+              <p class="kicker">Revisión pedagógica</p>
+              <h2 class="section-title" style="margin-top: var(--space-xs);">Tus 10 respuestas paso a paso</h2>
+            </div>
+            <span class="badge" id="review-summary-badge">10 preguntas</span>
+          </div>
+          <div class="review-list" id="review-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* ============================================================
+       BANCO DE 22 PREGUNTAS (5 TEMAS BASADOS EN LAS FUENTES)
+       Cada ronda toma 2 preguntas aleatorias por tema = 10 preguntas.
+       ============================================================ */
+    const TOPICS = [
+      { id: `encuestas`, label: `Preguntas en encuestas` },
+      { id: `datos`, label: `Datos discretos y continuos` },
+      { id: `absoluta`, label: `Frecuencia absoluta y acumulada` },
+      { id: `relativa`, label: `Frecuencia relativa` },
+      { id: `graficos`, label: `Diagramas de barras y medios` }
+    ];
+
+    const DESSERT_ROWS = [
+      { label: `Tres leches`, abs: 15 },
+      { label: `Tiramisú`, abs: 7 },
+      { label: `Higos con queso`, abs: 12 },
+      { label: `Pastel`, abs: 11 },
+      { label: `Gelatina`, abs: 7 },
+      { label: `Frutillas con crema`, abs: 3 }
+    ];
+
+    const BANK_ROWS = [
+      { label: `Excelente`, abs: 25, acc: 25, rel: `0,313` },
+      { label: `Muy buena`, abs: 40, acc: 65, rel: `0,500` },
+      { label: `Buena`, abs: 10, acc: 75, rel: `0,125` },
+      { label: `Regular`, abs: 3, acc: 78, rel: `0,037` },
+      { label: `Mala`, abs: 2, acc: 80, rel: `0,025` }
+    ];
+
+    const QUESTION_BANK = [
+      /* --- TEMA 1: ENCUESTAS Y TIPOS DE PREGUNTAS --- */
+      {
+        id: `q_enc_1`,
+        topic: `encuestas`,
+        prompt: `En una encuesta escolar sobre el postre favorito, el estudiante preguntó: "¿Cuál es tu postre favorito?" sin ofrecer opciones fijas para elegir. ¿Qué clase de pregunta utilizó?`,
+        options: [
+          `Pregunta abierta, porque permite una respuesta libre.`,
+          `Pregunta cerrada, porque solo admite un número entero.`,
+          `Pregunta mixta, porque combina gráfica y porcentaje.`,
+          `Pregunta continua, porque se mide en intervalos.`
+        ],
+        correctText: `Pregunta abierta, porque permite una respuesta libre.`,
+        explanation: `Las preguntas abiertas dejan que la persona encuestada responda libremente con sus propias palabras, sin limitarse a una lista cerrada de opciones.`
+      },
+      {
+        id: `q_enc_2`,
+        topic: `encuestas`,
+        prompt: `Un banco encuestó a 80 personas preguntando: "¿Cómo fue la atención al cliente?" y pidió elegir exclusivamente entre: Excelente, Muy buena, Buena, Regular o Mala. ¿Qué tipo de pregunta aplicó?`,
+        options: [
+          `Pregunta cerrada, porque tiene opciones fijas.`,
+          `Pregunta abierta, porque cada cliente escribe un ensayo.`,
+          `Pregunta mixta, porque incluye datos continuos.`,
+          `Pregunta relativa, porque se divide entre 80.`
+        ],
+        correctText: `Pregunta cerrada, porque tiene opciones fijas.`,
+        explanation: `En la fuente del servicio bancario se señala expresamente que es una pregunta cerrada porque limita las respuestas a categorías fijas predeterminadas.`
+      },
+      {
+        id: `q_enc_3`,
+        topic: `encuestas`,
+        prompt: `Si diseñas una encuesta con opciones fijas para marcar (por ejemplo: Fútbol, Básquet, Natación) y además agregas un espacio libre que dice "Otro (¿cuál?): _____", ¿qué clase de pregunta estás construyendo?`,
+        options: [
+          `Pregunta mixta, porque combina opciones fijas con respuesta libre.`,
+          `Pregunta exclusivamente cerrada.`,
+          `Pregunta exclusivamente abierta.`,
+          `Pregunta de frecuencia acumulada.`
+        ],
+        correctText: `Pregunta mixta, porque combina opciones fijas con respuesta libre.`,
+        explanation: `Las encuestas admiten tres clases de preguntas: abiertas (respuesta libre), cerradas (opciones fijas) y mixtas, que combinan ambos formatos.`
+      },
+      {
+        id: `q_enc_4`,
+        topic: `encuestas`,
+        prompt: `En el estudio del banco sobre la atención al cliente (Excelente, Muy buena, Buena, Regular, Mala), ¿qué papel cumple "atención al cliente" dentro de la estadística?`,
+        options: [
+          `Es la variable que se quiere medir mediante categorías.`,
+          `Es la frecuencia relativa expresada en decimales.`,
+          `Es el diagrama de barras completo.`,
+          `Es un dato continuo fraccionario.`
+        ],
+        correctText: `Es la variable que se quiere medir mediante categorías.`,
+        explanation: `En el problema bancario, "atención al cliente" es la variable en estudio, los tipos de opinión son las categorías y el número de respuestas es su frecuencia absoluta.`
+      },
+
+      /* --- TEMA 2: DATOS DISCRETOS VS CONTINUOS --- */
+      {
+        id: `q_dat_1`,
+        topic: `datos`,
+        prompt: `En la encuesta del aula sobre el postre favorito de 55 estudiantes, 15 eligieron "Tres leches" y 3 "Frutillas con crema". ¿Por qué estos valores son datos discretos?`,
+        options: [
+          `Porque son números enteros que surgen de conteos y no pueden dividirse.`,
+          `Porque se obtienen midiendo peso o estatura con una regla.`,
+          `Porque admiten cualquier decimal dentro de un intervalo.`,
+          `Porque su suma total siempre equivale a 1,000.`
+        ],
+        correctText: `Porque son números enteros que surgen de conteos y no pueden dividirse.`,
+        explanation: `Los datos discretos representan conteos exactos en números enteros (no puedes contar 15,4 estudiantes que eligieron tres leches).`
+      },
+      {
+        id: `q_dat_2`,
+        topic: `datos`,
+        prompt: `¿Cuál de las siguientes situaciones genera un dato continuo en lugar de un dato discreto?`,
+        options: [
+          `Medir la estatura exacta de un estudiante, por ejemplo 1,58 metros.`,
+          `Contar cuántos compañeros prefieren pastel en el aula.`,
+          `Registrar cuántos clientes calificaron el banco como "Excelente".`,
+          `Contar los partidos ganados por un equipo en un campeonato.`
+        ],
+        correctText: `Medir la estatura exacta de un estudiante, por ejemplo 1,58 metros.`,
+        explanation: `Los datos continuos provienen de mediciones (como estatura, masa o tiempo), admiten decimales o fracciones y pueden tomar cualquier valor en un intervalo.`
+      },
+      {
+        id: `q_dat_3`,
+        topic: `datos`,
+        prompt: `¿Cuál es la diferencia fundamental entre los datos discretos y los datos continuos?`,
+        options: [
+          `Los discretos surgen de conteos enteros; los continuos provienen de mediciones y admiten decimales.`,
+          `Los discretos se grafican en barras y los continuos nunca se pueden medir.`,
+          `Los discretos siempre son mayores que 50 y los continuos menores que 1.`,
+          `No hay diferencia: ambos significan conteo de categorías.`
+        ],
+        correctText: `Los discretos surgen de conteos enteros; los continuos provienen de mediciones y admiten decimales.`,
+        explanation: `Mientras los datos discretos cuentan elementos completos (enteros), los datos continuos miden magnitudes que pueden escribirse como fracciones o decimales.`
+      },
+      {
+        id: `q_dat_4`,
+        topic: `datos`,
+        prompt: `Al registrar las respuestas de 80 personas en la encuesta del banco (25, 40, 10, 3 y 2), ¿qué tipo de datos estamos manejando?`,
+        options: [
+          `Datos discretos.`,
+          `Datos continuos.`,
+          `Datos fraccionarios continuos.`,
+          `Preguntas abiertas.`
+        ],
+        correctText: `Datos discretos.`,
+        explanation: `Cada número indica cuántas personas eligieron esa opinión; al ser conteos de personas en números enteros, son datos discretos.`
+      },
+      {
+        id: `q_dat_5`,
+        topic: `datos`,
+        prompt: `Los datos que pueden tomar cualquier valor dentro de un intervalo dado y escribirse como números fraccionarios o decimales se denominan:`,
+        options: [
+          `Datos continuos.`,
+          `Datos discretos.`,
+          `Frecuencias acumuladas.`,
+          `Categorías cerradas.`
+        ],
+        correctText: `Datos continuos.`,
+        explanation: `Por definición de la fuente, los datos continuos provienen de mediciones y pueden tomar cualquier valor decimal o fraccionario dentro de un intervalo.`
+      },
+
+      /* --- TEMA 3: FRECUENCIA ABSOLUTA Y ACUMULADA --- */
+      {
+        id: `q_abs_1`,
+        topic: `absoluta`,
+        prompt: `Observa la tabla de postres favoritos de séptimo año. ¿Qué representa el número 12 junto a "Higos con queso"?`,
+        stimulus: { type: `dessert-table` },
+        options: [
+          `La frecuencia absoluta, es decir, las veces que se repite ese dato.`,
+          `La frecuencia relativa expresada como porcentaje.`,
+          `La frecuencia acumulada hasta el final de la tabla.`,
+          `Un dato continuo obtenido con balanza.`
+        ],
+        correctText: `La frecuencia absoluta, es decir, las veces que se repite ese dato.`,
+        explanation: `La frecuencia absoluta de un dato es el número exacto de veces que aparece o se repite dentro del conjunto (12 estudiantes eligieron higos con queso).`
+      },
+      {
+        id: `q_abs_2`,
+        topic: `absoluta`,
+        prompt: `Según la propiedad fundamental de la tabla de frecuencias, ¿a qué debe ser igual la suma de todas las frecuencias absolutas?`,
+        options: [
+          `Al número total de datos recolectados en la encuesta.`,
+          `Siempre al número 1,000.`,
+          `Al doble de la categoría más votada.`,
+          `A la frecuencia de la primera categoría solamente.`
+        ],
+        correctText: `Al número total de datos recolectados en la encuesta.`,
+        explanation: `Al sumar todas las frecuencias absolutas se obtiene el total de datos observados (por ejemplo, 55 en la encuesta de postres o 80 en la del banco).`
+      },
+      {
+        id: `q_abs_3`,
+        topic: `absoluta`,
+        prompt: `Observa los datos del servicio bancario (80 personas). Si "Excelente" tiene 25 respuestas y "Muy buena" tiene 40, ¿cuál es la frecuencia acumulada en la fila "Muy buena"?`,
+        stimulus: { type: `bank-table-partial` },
+        options: [
+          `65, porque se suma 25 + 40.`,
+          `40, porque solo se toma esa fila.`,
+          `15, porque se resta 40 - 25.`,
+          `80, porque es el total de la muestra.`
+        ],
+        correctText: `65, porque se suma 25 + 40.`,
+        explanation: `La frecuencia acumulada es la suma progresiva de las frecuencias absolutas: hasta "Muy buena" se acumulan 25 + 40 = 65 respuestas.`
+      },
+      {
+        id: `q_abs_4`,
+        topic: `absoluta`,
+        prompt: `¿Cómo se define la frecuencia acumulada en una tabla estadística?`,
+        options: [
+          `Como la suma progresiva de las frecuencias absolutas hasta completar el total de datos.`,
+          `Como el cociente entre la frecuencia absoluta y el total de encuestados.`,
+          `Como la categoría que recibió menor cantidad de votos.`,
+          `Como la resta entre el total y la frecuencia de cada fila.`
+        ],
+        correctText: `Como la suma progresiva de las frecuencias absolutas hasta completar el total de datos.`,
+        explanation: `La frecuencia acumulada va sumando paso a paso cada frecuencia absoluta con las anteriores hasta llegar al total del conjunto.`
+      },
+      {
+        id: `q_abs_5`,
+        topic: `absoluta`,
+        prompt: `En la tabla del banco (80 encuestados), la frecuencia acumulada hasta "Regular" es 78. Si "Mala" tiene frecuencia absoluta 2, ¿qué valor completa la frecuencia acumulada final?`,
+        stimulus: { type: `bank-table-acc` },
+        options: [
+          `80, coincidiendo con el total de datos.`,
+          `76, al restar 78 - 2.`,
+          `2, igual que su frecuencia absoluta.`,
+          `1,000, igual que la suma relativa.`
+        ],
+        correctText: `80, coincidiendo con el total de datos.`,
+        explanation: `En la última fila se suma 78 + 2 = 80. La frecuencia acumulada final siempre coincide con el total de datos de la tabla.`
+      },
+
+      /* --- TEMA 4: FRECUENCIA RELATIVA --- */
+      {
+        id: `q_rel_1`,
+        topic: `relativa`,
+        prompt: `¿Qué operación permite calcular la frecuencia relativa de una categoría?`,
+        options: [
+          `Dividir la frecuencia absoluta de la categoría entre el número total de datos.`,
+          `Sumar la frecuencia absoluta con la frecuencia acumulada.`,
+          `Restar la frecuencia menor de la frecuencia mayor.`,
+          `Multiplicar el número de categorías por el total de encuestados.`
+        ],
+        correctText: `Dividir la frecuencia absoluta de la categoría entre el número total de datos.`,
+        explanation: `La frecuencia relativa indica qué parte de la muestra corresponde a esa categoría y se obtiene dividiendo: frecuencia absoluta ÷ total de datos.`
+      },
+      {
+        id: `q_rel_2`,
+        topic: `relativa`,
+        prompt: `En la encuesta bancaria de 80 personas, 40 respondieron "Muy buena". ¿Cuál es su frecuencia relativa expresada como número decimal?`,
+        stimulus: { type: `bank-table-rel` },
+        options: [
+          `0,500 (porque 40 ÷ 80 = 0,500).`,
+          `0,313 (porque 25 ÷ 80 = 0,313).`,
+          `0,125 (porque 10 ÷ 80 = 0,125).`,
+          `0,400 (porque se coloca un cero delante).`
+        ],
+        correctText: `0,500 (porque 40 ÷ 80 = 0,500).`,
+        explanation: `Al dividir la frecuencia absoluta (40) entre el total de datos (80), obtenemos 40 / 80 = 0,500, es decir, la mitad de las personas encuestadas.`
+      },
+      {
+        id: `q_rel_3`,
+        topic: `relativa`,
+        prompt: `Si expresas todas las frecuencias relativas de una tabla en forma decimal (como 0,313 + 0,500 + 0,125 + 0,037 + 0,025), ¿a cuánto equivale su suma total?`,
+        options: [
+          `A 1 (o 1,000).`,
+          `Al total de personas encuestadas (80).`,
+          `A 0,500.`,
+          `A la frecuencia acumulada de la tercera fila.`
+        ],
+        correctText: `A 1 (o 1,000).`,
+        explanation: `Una propiedad clave de la tabla de frecuencias es que la suma de todas las frecuencias relativas expresadas en decimales siempre es igual a 1.`
+      },
+      {
+        id: `q_rel_4`,
+        topic: `relativa`,
+        prompt: `¿De qué maneras se puede expresar correctamente la frecuencia relativa de un dato?`,
+        options: [
+          `Como fracción, como decimal o como porcentaje.`,
+          `Únicamente como marcas de conteo (////).`,
+          `Solamente como número entero mayor que 10.`,
+          `Solo mediante una pregunta abierta.`
+        ],
+        correctText: `Como fracción, como decimal o como porcentaje.`,
+        explanation: `La frecuencia relativa representa una proporción del total y puede escribirse como fracción (25/80), decimal (0,313) o porcentaje (31,3 %).`
+      },
+
+      /* --- TEMA 5: DIAGRAMAS DE BARRAS Y LECTURA EN MEDIOS --- */
+      {
+        id: `q_gra_1`,
+        topic: `graficos`,
+        prompt: `Observa el diagrama de barras de los postres favoritos en séptimo año. ¿Cuál es el postre que más gusta y cuál es el que menos agrada?`,
+        stimulus: { type: `dessert-chart` },
+        options: [
+          `Más gusta: Tres leches (15). Menos agrada: Frutillas con crema (3).`,
+          `Más gusta: Higos con queso (12). Menos agrada: Tiramisú (7).`,
+          `Más gusta: Pastel (11). Menos agrada: Gelatina (7).`,
+          `Todos los postres obtuvieron exactamente la misma preferencia.`
+        ],
+        correctText: `Más gusta: Tres leches (15). Menos agrada: Frutillas con crema (3).`,
+        explanation: `El diagrama de barras permite comparar de un vistazo: la barra más alta es Tres leches (15) y la más baja es Frutillas con crema (3).`
+      },
+      {
+        id: `q_gra_2`,
+        topic: `graficos`,
+        prompt: `¿Cuál es la utilidad principal de representar los resultados de una tabla en un diagrama de barras?`,
+        options: [
+          `Comparar visualmente y con rapidez los resultados obtenidos en cada categoría.`,
+          `Transformar datos discretos en preguntas mixtas.`,
+          `Evitar calcular el total de datos recolectados.`,
+          `Sustituir los números enteros por definiciones escritas.`
+        ],
+        correctText: `Comparar visualmente y con rapidez los resultados obtenidos en cada categoría.`,
+        explanation: `El diagrama de barras traduce las frecuencias de la tabla en alturas proporcionales, facilitando detectar máximos, mínimos y diferencias al instante.`
+      },
+      {
+        id: `q_gra_3`,
+        topic: `graficos`,
+        prompt: `Según el diagrama de barras sobre el servicio bancario (80 encuestados), ¿cuántas personas calificaron la atención como "Excelente" o "Muy buena"?`,
+        stimulus: { type: `bank-chart` },
+        options: [
+          `65 personas en total (25 + 40).`,
+          `40 personas en total.`,
+          `15 personas en total (10 + 3 + 2).`,
+          `80 personas en total.`
+        ],
+        correctText: `65 personas en total (25 + 40).`,
+        explanation: `Leyendo las dos primeras barras del gráfico, "Excelente" tiene 25 y "Muy buena" tiene 40, lo que suma 65 opiniones favorables.`
+      },
+      {
+        id: `q_gra_4`,
+        topic: `graficos`,
+        prompt: `Según las fuentes, ¿en qué contextos de la vida cotidiana aparecen con frecuencia cuadros y tablas estadísticas para comunicar datos?`,
+        options: [
+          `En periódicos y revistas, por ejemplo para mostrar las posiciones de equipos en un torneo de fútbol.`,
+          `Exclusivamente en libros antiguos sin números.`,
+          `Solo cuando las frecuencias relativas suman 80.`,
+          `Únicamente en encuestas con preguntas abiertas sin conteo.`
+        ],
+        correctText: `En periódicos y revistas, por ejemplo para mostrar las posiciones de equipos en un torneo de fútbol.`,
+        explanation: `Los medios de comunicación (periódicos y revistas) usan tablas y gráficos estadísticos en temas de interés y deportes para presentar resultados ordenados y claros.`
+      }
+    ];
+
+    /* ============================================================
+       ESTADO GLOBAL
+       ============================================================ */
+    const state = {
+      studentName: ``,
+      soundEnabled: true,
+      questions: [],
+      currentIndex: 0,
+      score: 0,
+      streak: 0,
+      bestStreak: 0,
+      answeredCurrent: false,
+      answers: [],
+      history: []
+    };
+
+    let audioCtx = null;
+
+    /* ============================================================
+       WEB AUDIO API (ACIERTO, ERROR Y RACHA)
+       ============================================================ */
+    function ensureAudioContext() {
+      if (!state.soundEnabled) return null;
+      const AudioClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioClass) return null;
+      if (!audioCtx) {
+        audioCtx = new AudioClass();
+      }
+      if (audioCtx.state === `suspended`) {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(ctx, freq, startOffset, duration, type, peakGain) {
+      const now = ctx.currentTime + startOffset;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(peakGain, now + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + duration + 0.02);
+    }
+
+    function playCorrectSound() {
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+      playTone(ctx, 523.25, 0, 0.14, `triangle`, 0.16);
+      playTone(ctx, 659.25, 0.09, 0.22, `triangle`, 0.18);
+    }
+
+    function playWrongSound() {
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+      playTone(ctx, 329.63, 0, 0.16, `sine`, 0.14);
+      playTone(ctx, 261.63, 0.12, 0.24, `sine`, 0.14);
+    }
+
+    function playStreakSound() {
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+      playTone(ctx, 523.25, 0, 0.12, `triangle`, 0.18);
+      playTone(ctx, 659.25, 0.09, 0.12, `triangle`, 0.18);
+      playTone(ctx, 783.99, 0.18, 0.14, `triangle`, 0.20);
+      playTone(ctx, 1046.50, 0.28, 0.34, `sine`, 0.22);
+    }
+
+    function playFinishSound() {
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+      playTone(ctx, 440, 0, 0.14, `triangle`, 0.14);
+      playTone(ctx, 554.37, 0.1, 0.14, `triangle`, 0.14);
+      playTone(ctx, 659.25, 0.2, 0.32, `triangle`, 0.16);
+    }
+
+    function toggleSound() {
+      state.soundEnabled = !state.soundEnabled;
+      updateSoundUI();
+      if (state.soundEnabled) {
+        playCorrectSound();
+      }
+      persistState();
+    }
+
+    function updateSoundUI() {
+      const btn = document.getElementById(`sound-toggle-btn`);
+      const label = document.getElementById(`sound-label`);
+      const icon = document.getElementById(`sound-icon`);
+      if (btn) btn.setAttribute(`aria-pressed`, state.soundEnabled ? `true` : `false`);
+      if (label) label.textContent = state.soundEnabled ? `Sonido activo` : `Silenciado`;
+      if (icon) {
+        icon.setAttribute(`data-lucide`, state.soundEnabled ? `volume-2` : `volume-x`);
+        refreshIcons();
+      }
+    }
+
+    function refreshIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* ============================================================
+       SELECCIÓN ALEATORIA Y BARAJADO
+       ============================================================ */
+    function shuffleArray(list) {
+      const copy = list.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = copy[i];
+        copy[i] = copy[j];
+        copy[j] = temp;
+      }
+      return copy;
+    }
+
+    function buildRandomQuiz() {
+      let picked = [];
+      TOPICS.forEach(function(topicObj) {
+        const pool = QUESTION_BANK.filter(function(q) {
+          return q.topic === topicObj.id;
+        });
+        const shuffledPool = shuffleArray(pool);
+        picked = picked.concat(shuffledPool.slice(0, 2));
+      });
+
+      const randomizedOrder = shuffleArray(picked);
+      return randomizedOrder.map(function(q) {
+        const shuffledOptions = shuffleArray(q.options);
+        return {
+          id: q.id,
+          topic: q.topic,
+          prompt: q.prompt,
+          stimulus: q.stimulus || null,
+          options: shuffledOptions,
+          correctText: q.correctText,
+          explanation: q.explanation
+        };
+      });
+    }
+
+    /* ============================================================
+       CONFETI FESTIVO PARA RACHAS
+       ============================================================ */
+    function launchConfetti() {
+      const layer = document.getElementById(`confetti-layer`);
+      if (!layer) return;
+      layer.innerHTML = ``;
+      const classes = [`pink`, `grape`, `sky`, `tangerine`];
+      for (let i = 0; i < 28; i++) {
+        const dot = document.createElement(`span`);
+        const colorCls = classes[i % classes.length];
+        const shapeCls = i % 3 === 0 ? `pill` : ``;
+        dot.className = `confetti-piece ${colorCls} ${shapeCls}`;
+        dot.style.left = `${Math.round(Math.random() * 94 + 3)}%`;
+        dot.style.top = `${Math.round(Math.random() * 14)}%`;
+        dot.style.animationDelay = `${(Math.random() * 0.28).toFixed(2)}s`;
+        dot.style.setProperty(`--drift-x`, `${Math.round((Math.random() - 0.5) * 160)}px`);
+        layer.appendChild(dot);
+      }
+      setTimeout(function() {
+        if (layer) layer.innerHTML = ``;
+      }, 1600);
+    }
+
+    /* ============================================================
+       RENDER DE ESTÍMULOS VISUALES (TABLAS Y GRÁFICOS SVG)
+       ============================================================ */
+    function renderStimulusHTML(stimulus) {
+      if (!stimulus) return ``;
+
+      if (stimulus.type === `dessert-table`) {
+        const rowsHtml = DESSERT_ROWS.map(function(r) {
+          return `<tr><td>${r.label}</td><td class="num-col">${r.abs}</td></tr>`;
+        }).join(``);
+        return `
+          <p class="stimulus-caption">Tabla de frecuencias · Postres favoritos (7.º Año)</p>
+          <table class="freq-table">
+            <thead>
+              <tr><th>Postre</th><th class="num-col">Frecuencia absoluta</th></tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+            <tfoot>
+              <tr><td>Total</td><td class="num-col">55</td></tr>
+            </tfoot>
+          </table>
+        `;
+      }
+
+      if (stimulus.type === `bank-table-partial`) {
+        return `
+          <p class="stimulus-caption">Opinión sobre servicio bancario · 80 personas</p>
+          <table class="freq-table">
+            <thead>
+              <tr><th>Opinión</th><th class="num-col">Frecuencia absoluta</th><th class="num-col">Frecuencia acumulada</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Excelente</td><td class="num-col">25</td><td class="num-col">25</td></tr>
+              <tr><td>Muy buena</td><td class="num-col">40</td><td class="num-col">?</td></tr>
+              <tr><td>Buena</td><td class="num-col">10</td><td class="num-col">75</td></tr>
+              <tr><td>Regular</td><td class="num-col">3</td><td class="num-col">78</td></tr>
+              <tr><td>Mala</td><td class="num-col">2</td><td class="num-col">80</td></tr>
+            </tbody>
+          </table>
+        `;
+      }
+
+      if (stimulus.type === `bank-table-acc`) {
+        return `
+          <p class="stimulus-caption">Opinión sobre servicio bancario · Frecuencia acumulada</p>
+          <table class="freq-table">
+            <thead>
+              <tr><th>Opinión</th><th class="num-col">Frecuencia absoluta</th><th class="num-col">Frecuencia acumulada</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Excelente</td><td class="num-col">25</td><td class="num-col">25</td></tr>
+              <tr><td>Muy buena</td><td class="num-col">40</td><td class="num-col">65</td></tr>
+              <tr><td>Buena</td><td class="num-col">10</td><td class="num-col">75</td></tr>
+              <tr><td>Regular</td><td class="num-col">3</td><td class="num-col">78</td></tr>
+              <tr><td>Mala</td><td class="num-col">2</td><td class="num-col">?</td></tr>
+            </tbody>
+          </table>
+        `;
+      }
+
+      if (stimulus.type === `bank-table-rel`) {
+        return `
+          <p class="stimulus-caption">Opinión sobre servicio bancario · Frecuencia relativa</p>
+          <table class="freq-table">
+            <thead>
+              <tr><th>Opinión</th><th class="num-col">Frecuencia absoluta</th><th class="num-col">Frecuencia relativa</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Excelente</td><td class="num-col">25</td><td class="num-col">0,313</td></tr>
+              <tr><td>Muy buena</td><td class="num-col">40</td><td class="num-col">?</td></tr>
+              <tr><td>Buena</td><td class="num-col">10</td><td class="num-col">0,125</td></tr>
+              <tr><td>Regular</td><td class="num-col">3</td><td class="num-col">0,037</td></tr>
+              <tr><td>Mala</td><td class="num-col">2</td><td class="num-col">0,025</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><td>Total</td><td class="num-col">80</td><td class="num-col">1,000</td></tr>
+            </tfoot>
+          </table>
+        `;
+      }
+
+      if (stimulus.type === `dessert-chart`) {
+        return buildBarChartSVG(
+          `Diagrama de barras · Postres favoritos (55 estudiantes)`,
+          [
+            { short: `Tres leches`, val: 15, cls: `bar-series-1` },
+            { short: `Tiramisú`, val: 7, cls: `bar-series-2` },
+            { short: `Higos`, val: 12, cls: `bar-series-3` },
+            { short: `Pastel`, val: 11, cls: `bar-series-4` },
+            { short: `Gelatina`, val: 7, cls: `bar-series-2` },
+            { short: `Frutillas`, val: 3, cls: `bar-series-3` }
+          ],
+          18
+        );
+      }
+
+      if (stimulus.type === `bank-chart`) {
+        return buildBarChartSVG(
+          `Diagrama de barras · Atención al cliente (80 personas)`,
+          [
+            { short: `Excelente`, val: 25, cls: `bar-series-1` },
+            { short: `Muy buena`, val: 40, cls: `bar-series-2` },
+            { short: `Buena`, val: 10, cls: `bar-series-3` },
+            { short: `Regular`, val: 3, cls: `bar-series-4` },
+            { short: `Mala`, val: 2, cls: `bar-series-3` }
+          ],
+          45
+        );
+      }
+
+      return ``;
+    }
+
+    function buildBarChartSVG(caption, items, maxVal) {
+      const width = 520;
+      const height = 195;
+      const padLeft = 34;
+      const padBottom = 34;
+      const padTop = 24;
+      const plotW = width - padLeft - 14;
+      const plotH = height - padTop - padBottom;
+      const slotW = plotW / items.length;
+      const barW = Math.min(44, slotW * 0.56);
+
+      const ticks = [0, Math.round(maxVal / 3), Math.round((maxVal * 2) / 3), maxVal];
+      const gridSvg = ticks.map(function(t) {
+        const y = padTop + plotH - (t / maxVal) * plotH;
+        return `
+          <line x1="${padLeft}" y1="${y.toFixed(1)}" x2="${width - 10}" y2="${y.toFixed(1)}" class="chart-gridline" />
+          <text x="${padLeft - 8}" y="${(y + 4).toFixed(1)}" text-anchor="end" class="chart-axis-text">${t}</text>
+        `;
+      }).join(``);
+
+      const barsSvg = items.map(function(item, idx) {
+        const x = padLeft + idx * slotW + (slotW - barW) / 2;
+        const barH = Math.max(6, (item.val / maxVal) * plotH);
+        const y = padTop + plotH - barH;
+        const cx = x + barW / 2;
+        return `
+          <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" rx="10" class="${item.cls}" />
+          <text x="${cx.toFixed(1)}" y="${(y - 6).toFixed(1)}" text-anchor="middle" class="chart-val-text">${item.val}</text>
+          <text x="${cx.toFixed(1)}" y="${height - 10}" text-anchor="middle" class="chart-axis-text">${item.short}</text>
+        `;
+      }).join(``);
+
+      return `
+        <p class="stimulus-caption">${caption}</p>
+        <div class="bar-chart-wrap">
+          <svg class="bar-chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${caption}">
+            ${gridSvg}
+            ${barsSvg}
+          </svg>
+        </div>
+      `;
+    }
+
+    /* ============================================================
+       NAVEGACIÓN DE PANTALLAS Y FLUJO DEL CUESTIONARIO
+       ============================================================ */
+    function showView(viewId) {
+      const views = [`view-welcome`, `view-quiz`, `view-results`];
+      views.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          if (id === viewId) {
+            el.classList.add(`active`);
+          } else {
+            el.classList.remove(`active`);
+          }
+        }
+      });
+      const homeBtn = document.getElementById(`home-btn`);
+      if (homeBtn) {
+        homeBtn.style.display = viewId === `view-welcome` ? `none` : `inline-flex`;
+      }
+      refreshIcons();
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`)
+        .replace(/'/g, `&#39;`);
+    }
+
+    function clearNameError() {
+      const input = document.getElementById(`student-name-input`);
+      const err = document.getElementById(`name-error-msg`);
+      if (input) input.classList.remove(`input-error`);
+      if (err) err.textContent = ``;
+    }
+
+    function handleStartSubmit(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById(`student-name-input`);
+      const err = document.getElementById(`name-error-msg`);
+      if (!input) return;
+
+      const rawName = input.value.trim();
+      if (rawName.length < 2) {
+        input.classList.add(`input-error`);
+        if (err) err.textContent = `Escribe tu nombre (al menos 2 letras) para personalizar tu desafío.`;
+        input.focus();
+        return;
+      }
+
+      state.studentName = rawName;
+      ensureAudioContext();
+      startNewQuiz();
+    }
+
+    function startNewQuiz() {
+      state.questions = buildRandomQuiz();
+      state.currentIndex = 0;
+      state.score = 0;
+      state.streak = 0;
+      state.bestStreak = 0;
+      state.answeredCurrent = false;
+      state.answers = [];
+
+      const playerPill = document.getElementById(`player-pill`);
+      const playerPillName = document.getElementById(`player-pill-name`);
+      if (playerPill) playerPill.style.display = `inline-flex`;
+      if (playerPillName) playerPillName.textContent = state.studentName;
+
+      hideStreakBanner();
+      showView(`view-quiz`);
+      renderCurrentQuestion();
+      updateRailStats();
+      persistState();
+    }
+
+    function restartQuiz() {
+      ensureAudioContext();
+      startNewQuiz();
+    }
+
+    function returnToWelcome() {
+      hideStreakBanner();
+      showView(`view-welcome`);
+      renderHistory();
+    }
+
+    function getTopicLabel(topicId) {
+      const found = TOPICS.find(function(t) { return t.id === topicId; });
+      return found ? found.label : `Estadística`;
+    }
+
+    function renderCurrentQuestion() {
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+
+      state.answeredCurrent = false;
+
+      const num = state.currentIndex + 1;
+      const total = state.questions.length;
+
+      const progressLabel = document.getElementById(`progress-label`);
+      const greetingLabel = document.getElementById(`greeting-label`);
+      const progressBar = document.getElementById(`quiz-progressbar`);
+      const progressFill = document.getElementById(`progress-fill`);
+      const topicBadge = document.getElementById(`question-topic-badge`);
+      const numTag = document.getElementById(`question-num-tag`);
+      const promptEl = document.getElementById(`question-prompt-heading`);
+      const stimulusEl = document.getElementById(`question-stimulus`);
+      const optionsEl = document.getElementById(`options-container`);
+      const feedbackPanel = document.getElementById(`feedback-panel`);
+
+      if (progressLabel) progressLabel.textContent = `Pregunta ${num} de ${total}`;
+      if (greetingLabel) greetingLabel.textContent = `Turno de ${state.studentName}`;
+      if (progressBar) progressBar.setAttribute(`aria-valuenow`, String(num));
+      if (progressFill) progressFill.style.width = `${Math.round((num / total) * 100)}%`;
+      if (topicBadge) topicBadge.textContent = getTopicLabel(q.topic);
+      if (numTag) numTag.textContent = num < 10 ? `#0${num}` : `#${num}`;
+      if (promptEl) promptEl.textContent = q.prompt;
+
+      if (stimulusEl) {
+        if (q.stimulus) {
+          stimulusEl.innerHTML = renderStimulusHTML(q.stimulus);
+          stimulusEl.style.display = `block`;
+        } else {
+          stimulusEl.innerHTML = ``;
+          stimulusEl.style.display = `none`;
+        }
+      }
+
+      if (feedbackPanel) {
+        feedbackPanel.className = `feedback-panel`;
+      }
+
+      if (optionsEl) {
+        const letters = [`A`, `B`, `C`, `D`];
+        optionsEl.innerHTML = q.options.map(function(optText, idx) {
+          return `
+            <button type="button" class="option-btn" data-opt-index="${idx}" onclick="selectOption(${idx})">
+              <span class="option-key">${letters[idx]}</span>
+              <span class="option-text">${optText}</span>
+              <span class="option-status" aria-hidden="true"></span>
+            </button>
+          `;
+        }).join(``);
+      }
+
+      renderMiniTracker();
+      refreshIcons();
+    }
+
+    function selectOption(chosenIndex) {
+      if (state.answeredCurrent) return;
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+
+      state.answeredCurrent = true;
+      const chosenText = q.options[chosenIndex];
+      const isCorrect = chosenText === q.correctText;
+
+      if (isCorrect) {
+        state.score += 1;
+        state.streak += 1;
+        if (state.streak > state.bestStreak) {
+          state.bestStreak = state.streak;
+        }
+      } else {
+        state.streak = 0;
+      }
+
+      state.answers.push({
+        question: q,
+        chosenText: chosenText,
+        isCorrect: isCorrect
+      });
+
+      /* Actualizar estilos de opciones */
+      const buttons = document.querySelectorAll(`#options-container .option-btn`);
+      buttons.forEach(function(btn, idx) {
+        btn.disabled = true;
+        const optText = q.options[idx];
+        const statusEl = btn.querySelector(`.option-status`);
+        if (optText === q.correctText) {
+          btn.classList.add(`is-correct`);
+          if (statusEl) statusEl.innerHTML = `<i data-lucide="check-circle-2" style="width:20px;height:20px;"></i>`;
+        } else if (idx === chosenIndex && !isCorrect) {
+          btn.classList.add(`is-wrong`);
+          if (statusEl) statusEl.innerHTML = `<i data-lucide="x-circle" style="width:20px;height:20px;"></i>`;
+        } else {
+          btn.classList.add(`is-dimmed`);
+        }
+      });
+
+      /* Audio y celebración de racha */
+      if (isCorrect) {
+        if (state.streak >= 3 && state.streak % 3 === 0) {
+          playStreakSound();
+          showStreakBanner(state.streak);
+          launchConfetti();
+        } else {
+          playCorrectSound();
+          if (state.streak < 3) hideStreakBanner();
+        }
+      } else {
+        playWrongSound();
+        hideStreakBanner();
+      }
+
+      /* Panel de retroalimentación pedagógica */
+      const feedbackPanel = document.getElementById(`feedback-panel`);
+      const feedbackTitle = document.getElementById(`feedback-title`);
+      const feedbackExpl = document.getElementById(`feedback-explanation`);
+      const nextBtnLabel = document.getElementById(`next-btn-label`);
+
+      if (feedbackPanel) {
+        feedbackPanel.className = `feedback-panel visible ${isCorrect ? `correct` : `wrong`}`;
+      }
+      if (feedbackTitle) {
+        feedbackTitle.innerHTML = isCorrect
+          ? `<i data-lucide="sparkles" style="width:20px;height:20px;" aria-hidden="true"></i> ¡Correcto, ${escapeHTML(state.studentName)}!`
+          : `<i data-lucide="info" style="width:20px;height:20px;" aria-hidden="true"></i> Revisa este concepto`;
+      }
+      if (feedbackExpl) {
+        feedbackExpl.textContent = q.explanation;
+      }
+      if (nextBtnLabel) {
+        const isLast = state.currentIndex === state.questions.length - 1;
+        nextBtnLabel.textContent = isLast ? `Ver resultados finales` : `Siguiente pregunta`;
+      }
+
+      updateRailStats();
+      renderMiniTracker();
+      refreshIcons();
+    }
+
+    function showStreakBanner(streakCount) {
+      const banner = document.getElementById(`streak-banner`);
+      const bannerText = document.getElementById(`streak-banner-text`);
+      if (!banner || !bannerText) return;
+      bannerText.textContent = streakCount === 3
+        ? `¡Racha de 3 aciertos! 🔥`
+        : `¡Racha de ${streakCount} aciertos! 🔥`;
+      banner.classList.remove(`visible`);
+      void banner.offsetWidth;
+      banner.classList.add(`visible`);
+    }
+
+    function hideStreakBanner() {
+      const banner = document.getElementById(`streak-banner`);
+      if (banner) banner.classList.remove(`visible`);
+    }
+
+    function updateRailStats() {
+      const streakVal = document.getElementById(`rail-streak-val`);
+      const streakHint = document.getElementById(`rail-streak-hint`);
+      const scoreVal = document.getElementById(`rail-score-val`);
+      const bestStreakEl = document.getElementById(`rail-best-streak`);
+
+      if (streakVal) streakVal.textContent = state.streak >= 3 ? `${state.streak} 🔥` : String(state.streak);
+      if (scoreVal) scoreVal.textContent = `${state.score} / ${state.questions.length}`;
+      if (bestStreakEl) bestStreakEl.textContent = String(state.bestStreak);
+
+      if (streakHint) {
+        if (state.streak === 0) {
+          streakHint.textContent = `Acierta 3 seguidas para activar la celebración de racha.`;
+        } else if (state.streak < 3) {
+          const left = 3 - state.streak;
+          streakHint.textContent = left === 1
+            ? `¡Solo 1 acierto más para la racha de 3!`
+            : `Faltan ${left} aciertos más para la racha de 3.`;
+        } else {
+          streakHint.textContent = `¡Racha encendida, ${state.studentName}! Sigue así.`;
+        }
+      }
+
+      const mod = state.streak === 0 ? 0 : ((state.streak - 1) % 3) + 1;
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById(`sdot-${i}`);
+        if (!dot) continue;
+        dot.classList.remove(`lit`, `lit-grape`);
+        if (state.streak >= 3) {
+          dot.classList.add(i <= mod ? `lit` : `lit-grape`);
+        } else if (i <= state.streak) {
+          dot.classList.add(`lit`);
+        }
+      }
+    }
+
+    function renderMiniTracker() {
+      const container = document.getElementById(`mini-tracker`);
+      if (!container) return;
+      container.innerHTML = state.questions.map(function(q, idx) {
+        const ans = state.answers[idx];
+        let cls = `mini-pip`;
+        if (ans) {
+          cls += ans.isCorrect ? ` ok` : ` bad`;
+        } else if (idx === state.currentIndex) {
+          cls += ` current`;
+        }
+        return `<span class="${cls}">${idx + 1}</span>`;
+      }).join(``);
+    }
+
+    function nextQuestion() {
+      if (!state.answeredCurrent) return;
+      if (state.currentIndex < state.questions.length - 1) {
+        state.currentIndex += 1;
+        renderCurrentQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    /* ============================================================
+       PANTALLA FINAL Y RESUMEN
+       ============================================================ */
+    function finishQuiz() {
+      hideStreakBanner();
+      playFinishSound();
+
+      const total = state.questions.length;
+      const pct = Math.round((state.score / total) * 100);
+
+      if (pct >= 80) {
+        launchConfetti();
+      }
+
+      const titleEl = document.getElementById(`results-title`);
+      const verdictEl = document.getElementById(`results-verdict`);
+      const scoreEl = document.getElementById(`final-score-val`);
+      const pctEl = document.getElementById(`final-pct-label`);
+      const streakEl = document.getElementById(`final-streak-val`);
+      const streakNoteEl = document.getElementById(`final-streak-note`);
+      const reviewBadge = document.getElementById(`review-summary-badge`);
+
+      if (titleEl) {
+        const safeName = escapeHTML(state.studentName);
+        if (pct >= 80) {
+          titleEl.innerHTML = `¡Dominio total, <em>${safeName}</em>!`;
+        } else if (pct >= 60) {
+          titleEl.innerHTML = `¡Muy buen avance, <em>${safeName}</em>!`;
+        } else {
+          titleEl.innerHTML = `¡Sigue practicando, <em>${safeName}</em>!`;
+        }
+      }
+
+      if (verdictEl) {
+        if (pct >= 80) {
+          verdictEl.textContent = `Interpretas con seguridad encuestas, datos discretos y continuos, tablas de frecuencias y diagramas de barras.`;
+        } else if (pct >= 60) {
+          verdictEl.textContent = `Tienes una base sólida. Revisa las explicaciones de abajo y prueba una nueva ronda aleatoria para alcanzar tu mejor marca.`;
+        } else {
+          verdictEl.textContent = `Cada error es una pista para aprender. Lee el resumen paso a paso e intenta otra ronda con preguntas nuevas.`;
+        }
+      }
+
+      if (scoreEl) scoreEl.textContent = `${state.score} / ${total}`;
+      if (pctEl) pctEl.textContent = `${pct}% de aciertos`;
+      if (streakEl) streakEl.textContent = `${state.bestStreak} 🔥`;
+      if (streakNoteEl) {
+        streakNoteEl.textContent = state.bestStreak >= 3
+          ? `¡Lograste activar el bono de racha!`
+          : `Intenta conectar 3 seguidas en la próxima ronda`;
+      }
+      if (reviewBadge) reviewBadge.textContent = `${state.score} aciertos de ${total}`;
+
+      renderTopicBreakdown();
+      renderReviewList();
+
+      /* Guardar intento en historial persistido */
+      state.history.unshift({
+        name: state.studentName,
+        score: state.score,
+        total: total,
+        bestStreak: state.bestStreak
+      });
+      if (state.history.length > 6) {
+        state.history = state.history.slice(0, 6);
+      }
+      persistState();
+
+      showView(`view-results`);
+    }
+
+    function renderTopicBreakdown() {
+      const container = document.getElementById(`topic-breakdown`);
+      if (!container) return;
+
+      const fillClasses = [``, `s2`, `s3`, `s4`, ``];
+      container.innerHTML = TOPICS.map(function(topicObj, idx) {
+        const items = state.answers.filter(function(a) {
+          return a.question.topic === topicObj.id;
+        });
+        const hits = items.filter(function(a) { return a.isCorrect; }).length;
+        const count = items.length || 1;
+        const widthPct = Math.round((hits / count) * 100);
+        const cls = fillClasses[idx % fillClasses.length];
+        return `
+          <div class="topic-bar-row">
+            <div class="topic-bar-meta">
+              <span>${topicObj.label}</span>
+              <span>${hits} / ${count}</span>
+            </div>
+            <div class="topic-bar-track">
+              <div class="topic-bar-fill ${cls}" style="width: ${widthPct}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join(``);
+    }
+
+    function renderReviewList() {
+      const container = document.getElementById(`review-list`);
+      if (!container) return;
+
+      container.innerHTML = state.answers.map(function(entry, idx) {
+        const q = entry.question;
+        const ok = entry.isCorrect;
+        return `
+          <article class="review-item ${ok ? `is-ok` : `is-bad`}">
+            <div class="review-item-head">
+              <span class="kicker">Pregunta ${idx + 1} · ${getTopicLabel(q.topic)}</span>
+              <span class="status-pill ${ok ? `ok` : `bad`}">
+                ${ok ? `Acierto` : `Por reforzar`}
+              </span>
+            </div>
+            <p style="font-weight: 800; margin: var(--space-xs) 0 var(--space-sm) 0;">${q.prompt}</p>
+            <p style="margin: 0 0 var(--space-xs) 0; font-size: 0.92rem;">
+              <strong>Tu respuesta:</strong> ${entry.chosenText}
+            </p>
+            ${!ok ? `<p style="margin: 0 0 var(--space-xs) 0; font-size: 0.92rem; color: var(--positive);"><strong>Respuesta correcta:</strong> ${q.correctText}</p>` : ``}
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.9rem; color: var(--on-surface-variant);">
+              ${q.explanation}
+            </p>
+          </article>
+        `;
+      }).join(``);
+    }
+
+    function renderHistory() {
+      const container = document.getElementById(`history-container`);
+      if (!container) return;
+
+      if (!state.history || state.history.length === 0) {
+        container.innerHTML = `<p style="margin:0; color: var(--on-surface-variant);">Aún no has completado una ronda. Escribe tu nombre para registrar tu primer puntaje.</p>`;
+        return;
+      }
+
+      const itemsHtml = state.history.slice(0, 4).map(function(h) {
+        return `
+          <li class="history-row">
+            <span>${escapeHTML(h.name)}</span>
+            <span>${h.score}/${h.total} · Racha ${h.bestStreak} 🔥</span>
+          </li>
+        `;
+      }).join(``);
+      container.innerHTML = `<ul class="history-list">${itemsHtml}</ul>`;
+    }
+
+    /* ============================================================
+       ATAJOS DE TECLADO EN EL CUESTIONARIO
+       ============================================================ */
+    document.addEventListener(`keydown`, function(e) {
+      const quizView = document.getElementById(`view-quiz`);
+      if (!quizView || !quizView.classList.contains(`active`)) return;
+
+      if (!state.answeredCurrent && [`1`, `2`, `3`, `4`].indexOf(e.key) !== -1) {
+        const idx = Number(e.key) - 1;
+        selectOption(idx);
+      } else if (state.answeredCurrent && e.key === `Enter`) {
+        e.preventDefault();
+        nextQuestion();
+      }
+    });
+
+    /* ============================================================
+       PERSISTENCIA CON NOTEBOOK APP API E INICIALIZACIÓN
+       ============================================================ */
+    async function persistState() {
+      if (!window.notebookAppApi || typeof window.notebookAppApi.setAppState !== `function`) return;
+      try {
+        await window.notebookAppApi.setAppState({
+          studentName: state.studentName,
+          soundEnabled: state.soundEnabled,
+          history: state.history
+        });
+      } catch (err) {
+        /* Silencioso si no está disponible en entorno local */
+      }
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved) {
+            if (typeof saved.studentName === `string` && saved.studentName.trim()) {
+              state.studentName = saved.studentName.trim();
+              const input = document.getElementById(`student-name-input`);
+              if (input) input.value = state.studentName;
+            }
+            if (typeof saved.soundEnabled === `boolean`) {
+              state.soundEnabled = saved.soundEnabled;
+            }
+            if (Array.isArray(saved.history)) {
+              state.history = saved.history;
+            }
+          }
+        } catch (err) {
+          /* Continuar con estado inicial */
+        }
+      }
+
+      updateSoundUI();
+      renderHistory();
+      refreshIcons();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    if (document.readyState === `loading`) {
+      document.addEventListener(`DOMContentLoaded`, initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
