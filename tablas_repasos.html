@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="sticker">
+  <title>Estadística en marcha — Repaso interactivo de 7mo grado</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Sticker style tokens */
+      --background: #fef7ff;
+      --surface-container-low: #ffffff;
+      --surface-container: #f8eef8;
+      --surface-container-high: #f2e8f2;
+
+      --on-surface: #2e1a28;
+      --on-surface-variant: #604868;
+
+      --outline: #907898;
+      --outline-variant: #dcc8e0;
+
+      --primary: #c2207f;
+      --on-primary: #ffffff;
+      --primary-container: #f080c0;
+      --on-primary-container: #2e1a28;
+      --secondary: #7c52aa;
+      --on-secondary: #ffffff;
+      --secondary-container: #ebe0f7;
+      --tertiary: #0096cc;
+      --tertiary-container: #dff5fd;
+      --error: #c53030;
+      --on-error: #ffffff;
+      --error-container: #fde8e8;
+
+      --data-1: #c2207f;
+      --data-2: #7c52aa;
+      --data-3: #0096cc;
+      --data-4: #d96a00;
+      --data-4-container: #fff0e0;
+      --data-context: #c8b8d0;
+
+      --font-headline: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-label: 'DM Sans', sans-serif;
+
+      --rounded: 1rem;
+      --rounded-lg: 2rem;
+      --rounded-full: 9999px;
+
+      --shadow-pink: 0 4px 16px rgb(224 64 160 / 0.2);
+      --shadow-pink-deep: 0 10px 28px rgb(224 64 160 / 0.32);
+      --shadow-grape: 0 4px 16px rgb(124 82 170 / 0.2);
+      --shadow-grape-deep: 0 10px 26px rgb(124 82 170 / 0.3);
+      --shadow-sky: 0 4px 16px rgb(0 150 204 / 0.2);
+      --pop-scale: scale(1.03);
+      --lift: translateY(-4px);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* 2. Shared semantic, focus, type scale, spacing & motion tokens */
+      --positive: #157347;
+      --on-positive: #ffffff;
+      --positive-container: #dcfce7;
+      --warning: #a15200;
+      --warning-container: #fef3c7;
+
+      --focus: #c2207f;
+
+      --display-size: clamp(2.125rem, 1.35rem + 3.4vw, 3.35rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.125rem);
+      --subhead-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-md);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .page-shell * { min-width: 0; }
+
+    /* Sticky Car Progress Tracker */
+    .race-tracker-wrap {
+      position: sticky;
+      top: var(--space-sm);
+      z-index: 50;
+      margin-bottom: var(--space-sm);
+    }
+
+    .race-tracker {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow-sky);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .race-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .race-status-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .race-percent-badge {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 800;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .track-stage {
+      position: relative;
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-xs);
+    }
+
+    .car-runner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 44px;
+      height: 28px;
+      pointer-events: none;
+      transform: translateX(0);
+      transition: transform var(--dur-long) var(--ease-bounce);
+      z-index: 3;
+    }
+
+    .road-rail {
+      position: relative;
+      height: 16px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .road-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--tertiary);
+      border-radius: var(--rounded-full);
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform var(--dur-long) var(--ease-bounce);
+    }
+
+    .road-dashes {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      pointer-events: none;
+    }
+
+    .road-dash {
+      width: 10px;
+      height: 3px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container-low);
+      opacity: 0.7;
+    }
+
+    .checkpoints-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+
+    .goal-tag {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-shrink: 0;
+    }
+
+    .checkpoint-dots {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex: 1;
+      gap: var(--space-xs);
+    }
+
+    .cp-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--rounded-full);
+      transition: transform var(--dur-short) var(--ease-bounce);
+    }
+    .cp-btn:hover { transform: var(--pop-scale); }
+    .cp-btn:active { transform: scale(0.95); }
+
+    .cp-pill {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container-high);
+      color: var(--on-surface-variant);
+      font-weight: 800;
+      font-size: var(--label-size);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-grape);
+      transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+    }
+
+    .cp-btn.is-current .cp-pill {
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--shadow-pink);
+    }
+
+    .cp-btn.is-done .cp-pill {
+      background: var(--positive);
+      color: var(--on-positive);
+    }
+
+    /* Typography */
+    .kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--secondary);
+      margin: 0;
+    }
+
+    .display {
+      font-family: var(--font-headline);
+      font-weight: 900;
+      font-size: var(--display-size);
+      letter-spacing: -0.03em;
+      line-height: 1.07;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .display em, .section-title em {
+      font-style: normal;
+      color: var(--primary);
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--headline-size);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .subhead {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      max-width: 65ch;
+      color: var(--on-surface);
+    }
+
+    .muted {
+      color: var(--on-surface-variant);
+    }
+
+    /* Hero Panel */
+    .hero-panel {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow-pink);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      background: var(--surface-container-low);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      margin-top: var(--space-xs);
+    }
+
+    /* Buttons (Mobile-first >= 48px touch targets) */
+    .btn {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--rounded-full);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      text-decoration: none;
+      transition: transform var(--dur-short) var(--ease-bounce),
+                  box-shadow var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out);
+    }
+    .btn:hover { transform: var(--pop-scale); }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--shadow-pink);
+    }
+    .btn-primary:hover { box-shadow: var(--shadow-pink-deep); }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--on-secondary);
+      box-shadow: var(--shadow-grape);
+    }
+    .btn-secondary:hover { box-shadow: var(--shadow-grape-deep); }
+
+    .btn-soft {
+      background: var(--surface-container);
+      color: var(--primary);
+      border: 2px solid var(--outline-variant);
+    }
+    .btn-soft:hover {
+      background: var(--surface-container-high);
+    }
+
+    .btn-positive {
+      background: var(--positive);
+      color: var(--on-positive);
+      box-shadow: var(--shadow-sky);
+    }
+
+    .btn-quiet {
+      background: transparent;
+      color: var(--primary);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .btn-quiet:hover {
+      background: var(--surface-container);
+    }
+
+    /* Station Sections & Cards */
+    .station-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-pink);
+      display: grid;
+      gap: var(--space-md);
+      scroll-margin-top: 128px;
+      transition: box-shadow var(--dur-short) var(--ease-out);
+    }
+    .station-card:nth-of-type(3n+2) { box-shadow: var(--shadow-sky); }
+    .station-card:nth-of-type(3n+3) { box-shadow: var(--shadow-grape); }
+
+    .station-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .station-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+    }
+    .station-status-pill.is-done {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+
+    /* Container queries for adaptive split blocks */
+    .card-wrapper { container-type: inline-size; }
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: center;
+    }
+    @container (min-width: 520px) {
+      .split-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      }
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    .mini-card {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+      align-content: start;
+    }
+    .mini-card.is-sky { background: var(--tertiary-container); }
+    .mini-card.is-grape { background: var(--secondary-container); }
+    .mini-card.is-amber { background: var(--data-4-container); }
+
+    .formula-pill {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-full);
+      padding: var(--space-xs) var(--space-md);
+      font-weight: 800;
+      color: var(--primary);
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+      width: fit-content;
+    }
+
+    .illustration-box {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .illustration-box svg {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      display: block;
+    }
+
+    /* Interactive Canvas Wells */
+    .interactive-well {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .well-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    /* Quiz / Classification Items */
+    .quiz-item {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-grape);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .chip-btn {
+      min-height: 46px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      border: 2px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      transition: transform var(--dur-short) var(--ease-bounce),
+                  background-color var(--dur-short) var(--ease-out),
+                  box-shadow var(--dur-short) var(--ease-out);
+    }
+    .chip-btn:hover { transform: var(--pop-scale); }
+    .chip-btn:active { transform: scale(0.97); }
+    .chip-btn.is-selected {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-pink);
+    }
+    .chip-btn.is-correct {
+      background: var(--positive);
+      color: var(--on-positive);
+      border-color: var(--positive);
+    }
+    .chip-btn.is-wrong {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    .feedback-banner {
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: none;
+    }
+    .feedback-banner.is-visible { display: block; }
+    .feedback-banner.is-ok {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+    .feedback-banner.is-retry {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    /* Segmented Controls */
+    .segmented {
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      padding: var(--space-xs);
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      width: 100%;
+    }
+    .seg-btn {
+      flex: 1 1 0;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      border: none;
+      border-radius: var(--rounded-full);
+      background: transparent;
+      color: var(--on-surface-variant);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out),
+                  color var(--dur-short) var(--ease-out),
+                  transform var(--dur-short) var(--ease-bounce);
+    }
+    .seg-btn:hover { transform: var(--pop-scale); }
+    .seg-btn.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--shadow-pink);
+    }
+
+    /* Tables */
+    .table-scroll {
+      overflow-x: auto;
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      box-shadow: var(--shadow-pink);
+    }
+
+    table.freq-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+      min-width: 460px;
+    }
+
+    .freq-table thead th {
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .freq-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      vertical-align: middle;
+    }
+
+    .freq-table tbody tr:nth-child(even) {
+      background: var(--surface-container);
+    }
+
+    .freq-table tbody tr.is-interactive-row {
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .freq-table tbody tr.is-interactive-row.is-focused-row {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 700;
+    }
+
+    .freq-table tfoot td {
+      background: var(--secondary-container);
+      color: var(--on-surface);
+      font-weight: 800;
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .num-cell {
+      text-align: right;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tally-text {
+      font-family: var(--font-label);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--secondary);
+      font-size: 0.875rem;
+    }
+
+    .stepper-group {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .step-mini-btn {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: var(--rounded-full);
+      border: 2px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--primary);
+      font-size: 1.25rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--dur-short) var(--ease-bounce), background-color var(--dur-short) var(--ease-out);
+    }
+    .step-mini-btn:hover { transform: var(--pop-scale); background: var(--surface-container); }
+    .step-mini-btn:active { transform: scale(0.95); }
+
+    .cum-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--tertiary-container);
+      color: var(--on-surface);
+      font-weight: 800;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-size: 0.9375rem;
+    }
+
+    /* Key Figures Strip */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+
+    .kpi-tile {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-sky);
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .kpi-value {
+      font-weight: 900;
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+      line-height: 1.1;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Bar Chart Canvas */
+    .chart-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-pink);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .chart-box {
+      width: 100%;
+      min-height: 290px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chart-box svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    .bar-group {
+      cursor: pointer;
+    }
+    .bar-rect {
+      transition: transform var(--dur-short) var(--ease-bounce), opacity var(--dur-short) var(--ease-out);
+      transform-box: fill-box;
+      transform-origin: bottom center;
+    }
+    .bar-group:hover .bar-rect,
+    .bar-group.is-selected .bar-rect {
+      transform: scaleY(1.04);
+    }
+
+    .chart-tooltip-pill {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    /* Station Footer CTA */
+    .station-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      padding-top: var(--space-xs);
+    }
+
+    /* Celebration Banner */
+    .finish-banner {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow-pink-deep);
+      padding: var(--space-xl) var(--space-lg);
+      display: none;
+      gap: var(--space-md);
+      text-align: left;
+    }
+    .finish-banner.is-visible {
+      display: grid;
+      animation: popIn var(--dur-long) var(--ease-bounce);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .sources-note {
+      padding: var(--space-md) var(--space-sm) var(--space-xl);
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        padding: var(--space-sm);
+        gap: var(--space-md);
+      }
+      .hero-panel,
+      .station-card {
+        padding: var(--space-md);
+        border-radius: var(--rounded);
+      }
+      .station-footer .btn {
+        width: 100%;
+      }
+      .hero-actions .btn {
+        width: 100%;
+      }
+      .goal-tag {
+        font-size: 0.7rem;
+      }
+      .cp-btn {
+        min-width: 38px;
+      }
+      .cp-pill {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <!-- Hero -->
+    <section class="hero-panel" aria-labelledby="main-title">
+      <div class="hero-top">
+        <span class="badge">Matemáticas · 7mo Grado</span>
+        <span class="tag">Refuerzo interactivo</span>
+      </div>
+      <h1 id="main-title" class="display">Estadística en <em>marcha</em>: de la encuesta al gráfico</h1>
+      <p>
+        Repasa paso a paso cómo organizar datos reales en tablas de frecuencias y leer diagramas de barras. Completa cada parada para que el carrito avance desde la salida hasta la meta final.
+      </p>
+      <div class="hero-actions">
+        <button type="button" class="btn btn-primary" onclick="scrollToStation(1)">
+          Arrancar en la Parada 1
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </button>
+        <button type="button" id="reset-progress-btn" class="btn btn-quiet" onclick="handleResetProgress(this)">
+          Reiniciar recorrido
+        </button>
+      </div>
+    </section>
+
+    <!-- Sticky Car Progress Track -->
+    <div class="race-tracker-wrap" role="region" aria-label="Barra de progreso del recorrido">
+      <div class="race-tracker">
+        <div class="race-top-row">
+          <span class="race-status-label" id="race-status-text">
+            Parada actual: 0 de 5 completadas
+          </span>
+          <span class="race-percent-badge" id="race-percent-badge">0%</span>
+        </div>
+
+        <div class="track-stage" id="track-stage">
+          <!-- Carrito SVG -->
+          <div class="car-runner" id="car-runner" aria-hidden="true">
+            <svg viewBox="0 0 64 40" width="44" height="28">
+              <!-- Shadow -->
+              <ellipse cx="32" cy="36" rx="24" ry="3" fill="var(--outline-variant)"></ellipse>
+              <!-- Car body -->
+              <path d="M8 22 C8 16 14 14 20 14 L24 7 C26 4 30 3 36 3 L43 3 C48 3 51 7 53 14 L57 15 C60 16 61 19 61 23 L61 28 C61 30 59 31 56 31 L10 31 C7 31 6 29 6 26 Z" fill="var(--primary)" stroke="var(--on-surface)" stroke-width="2.5" stroke-linejoin="round"></path>
+              <!-- Window -->
+              <path d="M25 14 L28 7 C29 6 31 6 35 6 L42 6 C45 6 47 8 48 14 Z" fill="var(--tertiary-container)" stroke="var(--on-surface)" stroke-width="2" stroke-linejoin="round"></path>
+              <!-- Stripe -->
+              <rect x="12" y="20" width="38" height="4" rx="2" fill="var(--tertiary)"></rect>
+              <!-- Headlight -->
+              <circle cx="57" cy="21" r="2.8" fill="var(--data-4)"></circle>
+              <!-- Wheels -->
+              <circle cx="19" cy="31" r="6" fill="var(--on-surface)"></circle>
+              <circle cx="19" cy="31" r="2.5" fill="var(--surface-container-low)"></circle>
+              <circle cx="47" cy="31" r="6" fill="var(--on-surface)"></circle>
+              <circle cx="47" cy="31" r="2.5" fill="var(--surface-container-low)"></circle>
+            </svg>
+          </div>
+
+          <div class="road-rail">
+            <div class="road-fill" id="road-fill"></div>
+            <div class="road-dashes" aria-hidden="true">
+              <span class="road-dash"></span>
+              <span class="road-dash"></span>
+              <span class="road-dash"></span>
+              <span class="road-dash"></span>
+              <span class="road-dash"></span>
+              <span class="road-dash"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkpoints-row">
+          <span class="goal-tag">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 22V4"></path>
+              <path d="M4 4h14l-3 5 3 5H4"></path>
+            </svg>
+            Salida
+          </span>
+
+          <div class="checkpoint-dots" role="navigation" aria-label="Saltar a una parada">
+            <button type="button" class="cp-btn is-current" id="cp-1" onclick="scrollToStation(1)" aria-label="Ir a Parada 1: Encuestas">
+              <span class="cp-pill">1</span>
+            </button>
+            <button type="button" class="cp-btn" id="cp-2" onclick="scrollToStation(2)" aria-label="Ir a Parada 2: Datos discretos y continuos">
+              <span class="cp-pill">2</span>
+            </button>
+            <button type="button" class="cp-btn" id="cp-3" onclick="scrollToStation(3)" aria-label="Ir a Parada 3: Frecuencia absoluta y acumulada">
+              <span class="cp-pill">3</span>
+            </button>
+            <button type="button" class="cp-btn" id="cp-4" onclick="scrollToStation(4)" aria-label="Ir a Parada 4: Frecuencia relativa">
+              <span class="cp-pill">4</span>
+            </button>
+            <button type="button" class="cp-btn" id="cp-5" onclick="scrollToStation(5)" aria-label="Ir a Parada 5: Diagrama de barras">
+              <span class="cp-pill">5</span>
+            </button>
+          </div>
+
+          <span class="goal-tag">
+            Meta
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--data-4)" stroke="var(--on-surface)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+              <path d="M4 22h16"></path>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARADA 1: Encuestas -->
+    <article class="station-card card-wrapper" id="station-1" aria-labelledby="s1-title">
+      <div class="station-header">
+        <div>
+          <p class="kicker">Parada 1 de 5 · Recolección de datos</p>
+          <h2 id="s1-title" class="section-title">Las <em>encuestas</em> y sus tres preguntas</h2>
+        </div>
+        <span class="station-status-pill" id="status-pill-1">En curso</span>
+      </div>
+
+      <div class="split-grid">
+        <div style="display: grid; gap: var(--space-sm);">
+          <p>
+            Una <strong>encuesta</strong> sirve para recoger opiniones o datos de un grupo de personas. Según cómo se responda, las preguntas se dividen en tres tipos:
+          </p>
+          <div class="concept-grid">
+            <div class="mini-card">
+              <strong style="color: var(--primary);">Abierta</strong>
+              <span class="muted">Cada persona responde con sus propias palabras, sin lista de opciones.</span>
+            </div>
+            <div class="mini-card is-sky">
+              <strong style="color: var(--on-surface);">Cerrada</strong>
+              <span class="muted">Solo permite elegir entre opciones fijas (como Excelente, Buena o Mala).</span>
+            </div>
+            <div class="mini-card is-grape">
+              <strong style="color: var(--secondary);">Mixta</strong>
+              <span class="muted">Combina opciones cerradas con un espacio abierto para explicar el porqué.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <svg viewBox="0 0 280 210" aria-hidden="true">
+            <!-- Clipboard -->
+            <rect x="34" y="24" width="142" height="170" rx="18" fill="var(--surface-container-low)" stroke="var(--on-surface)" stroke-width="3"></rect>
+            <rect x="75" y="12" width="60" height="22" rx="10" fill="var(--secondary)" stroke="var(--on-surface)" stroke-width="3"></rect>
+            <circle cx="105" cy="23" r="4" fill="var(--surface-container-low)"></circle>
+            <!-- Check rows -->
+            <rect x="52" y="54" width="22" height="22" rx="7" fill="var(--primary)"></rect>
+            <path d="M58 65 L62 69 L69 60" fill="none" stroke="var(--on-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <rect x="84" y="58" width="74" height="12" rx="6" fill="var(--surface-container-high)"></rect>
+
+            <rect x="52" y="92" width="22" height="22" rx="7" fill="var(--tertiary)"></rect>
+            <path d="M58 103 L62 107 L69 98" fill="none" stroke="var(--on-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <rect x="84" y="96" width="62" height="12" rx="6" fill="var(--surface-container-high)"></rect>
+
+            <rect x="52" y="130" width="22" height="22" rx="7" fill="var(--data-4)"></rect>
+            <rect x="84" y="134" width="70" height="12" rx="6" fill="var(--surface-container-high)"></rect>
+
+            <!-- Speech bubble -->
+            <path d="M150 56 C150 44 160 36 174 36 L246 36 C258 36 266 44 266 56 L266 94 C266 106 258 114 246 114 L194 114 L176 128 L180 114 L174 114 C160 114 150 106 150 94 Z" fill="var(--primary-container)" stroke="var(--on-surface)" stroke-width="3" stroke-linejoin="round"></path>
+            <rect x="168" y="55" width="78" height="10" rx="5" fill="var(--on-surface)"></rect>
+            <rect x="168" y="75" width="56" height="10" rx="5" fill="var(--primary)"></rect>
+
+            <!-- Pencil -->
+            <g transform="translate(198,136) rotate(-25)">
+              <rect x="0" y="0" width="18" height="58" rx="6" fill="var(--data-4)" stroke="var(--on-surface)" stroke-width="3"></rect>
+              <polygon points="0,58 18,58 9,74" fill="var(--surface-container-low)" stroke="var(--on-surface)" stroke-width="3" stroke-linejoin="round"></polygon>
+              <circle cx="9" cy="69" r="3" fill="var(--on-surface)"></circle>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Interactive Canvas 1 -->
+      <div class="interactive-well" aria-labelledby="s1-lab-title">
+        <div class="well-header">
+          <div>
+            <p class="kicker">Canvas interactivo</p>
+            <h3 id="s1-lab-title" class="subhead">Toca el tipo correcto para cada pregunta</h3>
+          </div>
+          <span class="badge" id="s1-score-badge">0 / 3 listas</span>
+        </div>
+
+        <div class="quiz-item" data-q="q1">
+          <p><strong>1.</strong> «¿Cómo fue la atención al cliente en el banco? Marca: Excelente, Muy buena, Buena, Regular o Mala».</p>
+          <div class="choice-row">
+            <button type="button" class="chip-btn" onclick="answerS1('q1', 'abierta', this)">Abierta</button>
+            <button type="button" class="chip-btn" onclick="answerS1('q1', 'cerrada', this)">Cerrada</button>
+            <button type="button" class="chip-btn" onclick="answerS1('q1', 'mixta', this)">Mixta</button>
+          </div>
+          <div class="feedback-banner" id="fb-q1"></div>
+        </div>
+
+        <div class="quiz-item" data-q="q2">
+          <p><strong>2.</strong> «¿Qué postre te gustaría que vendan en el bar escolar y qué ingrediente añadirías?» (respuesta libre).</p>
+          <div class="choice-row">
+            <button type="button" class="chip-btn" onclick="answerS1('q2', 'abierta', this)">Abierta</button>
+            <button type="button" class="chip-btn" onclick="answerS1('q2', 'cerrada', this)">Cerrada</button>
+            <button type="button" class="chip-btn" onclick="answerS1('q2', 'mixta', this)">Mixta</button>
+          </div>
+          <div class="feedback-banner" id="fb-q2"></div>
+        </div>
+
+        <div class="quiz-item" data-q="q3">
+          <p><strong>3.</strong> «Elige tu deporte favorito (Fútbol, Básquet, Vóley) y escribe brevemente por qué te gusta».</p>
+          <div class="choice-row">
+            <button type="button" class="chip-btn" onclick="answerS1('q3', 'abierta', this)">Abierta</button>
+            <button type="button" class="chip-btn" onclick="answerS1('q3', 'cerrada', this)">Cerrada</button>
+            <button type="button" class="chip-btn" onclick="answerS1('q3', 'mixta', this)">Mixta</button>
+          </div>
+          <div class="feedback-banner" id="fb-q3"></div>
+        </div>
+      </div>
+
+      <div class="station-footer">
+        <span class="muted" id="s1-hint">Puedes avanzar cuando quieras o completar las 3 preguntas.</span>
+        <button type="button" class="btn btn-primary" id="complete-btn-1" onclick="completeStation(1)">
+          Completar Parada 1 y avanzar
+        </button>
+      </div>
+    </article>
+
+    <!-- PARADA 2: Datos Discretos vs Continuos -->
+    <article class="station-card card-wrapper" id="station-2" aria-labelledby="s2-title">
+      <div class="station-header">
+        <div>
+          <p class="kicker">Parada 2 de 5 · Tipos de datos</p>
+          <h2 id="s2-title" class="section-title">Datos <em>discretos</em> contra datos continuos</h2>
+        </div>
+        <span class="station-status-pill" id="status-pill-2">Pendiente</span>
+      </div>
+
+      <div class="split-grid">
+        <div class="concept-grid">
+          <div class="mini-card">
+            <strong style="color: var(--primary);">Datos discretos (conteo)</strong>
+            <p>Son números <strong>enteros</strong> que nacen de contar cosas y no pueden partirse en decimales.</p>
+            <span class="formula-pill">Ej: 15 votos, 7 estudiantes</span>
+          </div>
+          <div class="mini-card is-sky">
+            <strong style="color: var(--on-surface);">Datos continuos (medición)</strong>
+            <p>Salen de <strong>medir</strong> y sí admiten decimales o fracciones dentro de un intervalo.</p>
+            <span class="formula-pill">Ej: 1,54 m · 42,5 kg</span>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <svg viewBox="0 0 280 200" aria-hidden="true">
+            <!-- Left side: Discretos (Cupcakes enteros 1, 2, 3) -->
+            <rect x="12" y="18" width="118" height="164" rx="18" fill="var(--surface-container-low)" stroke="var(--primary)" stroke-width="3"></rect>
+            <rect x="26" y="28" width="90" height="22" rx="11" fill="var(--primary)"></rect>
+            <text x="71" y="43" text-anchor="middle" fill="var(--on-primary)" font-size="11" font-weight="800">DISCRETOS</text>
+            <!-- Whole items -->
+            <circle cx="44" cy="96" r="15" fill="var(--primary-container)" stroke="var(--on-surface)" stroke-width="2.5"></circle>
+            <text x="44" y="100" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="900">1</text>
+            <circle cx="80" cy="96" r="15" fill="var(--primary-container)" stroke="var(--on-surface)" stroke-width="2.5"></circle>
+            <text x="80" y="100" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="900">2</text>
+            <circle cx="104" cy="134" r="15" fill="var(--primary-container)" stroke="var(--on-surface)" stroke-width="2.5"></circle>
+            <text x="104" y="138" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="900">3</text>
+            <text x="71" y="168" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11" font-weight="700">Solo enteros</text>
+
+            <!-- Right side: Continuos (Regla con decimales) -->
+            <rect x="148" y="18" width="120" height="164" rx="18" fill="var(--surface-container-low)" stroke="var(--tertiary)" stroke-width="3"></rect>
+            <rect x="163" y="28" width="90" height="22" rx="11" fill="var(--tertiary)"></rect>
+            <text x="208" y="43" text-anchor="middle" fill="var(--on-primary)" font-size="11" font-weight="800">CONTINUOS</text>
+            <!-- Ruler -->
+            <rect x="164" y="84" width="88" height="36" rx="8" fill="var(--tertiary-container)" stroke="var(--on-surface)" stroke-width="2.5"></rect>
+            <line x1="176" y1="84" x2="176" y2="100" stroke="var(--on-surface)" stroke-width="2.5"></line>
+            <line x1="192" y1="84" x2="192" y2="95" stroke="var(--on-surface)" stroke-width="2"></line>
+            <line x1="208" y1="84" x2="208" y2="104" stroke="var(--primary)" stroke-width="3"></line>
+            <line x1="224" y1="84" x2="224" y2="95" stroke="var(--on-surface)" stroke-width="2"></line>
+            <line x1="240" y1="84" x2="240" y2="100" stroke="var(--on-surface)" stroke-width="2.5"></line>
+            <text x="208" y="142" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="900">1,54 m</text>
+            <text x="208" y="168" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11" font-weight="700">Con decimales</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Interactive Canvas 2 -->
+      <div class="interactive-well" aria-labelledby="s2-lab-title">
+        <div class="well-header">
+          <div>
+            <p class="kicker">Canvas interactivo</p>
+            <h3 id="s2-lab-title" class="subhead">Clasifica cada tarjeta como discreto o continuo</h3>
+          </div>
+          <span class="badge" id="s2-score-badge">0 / 4 listas</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="quiz-item" data-d="d1">
+            <p><strong>A.</strong> Número de estudiantes que prefieren tres leches (15).</p>
+            <div class="choice-row">
+              <button type="button" class="chip-btn" onclick="answerS2('d1', 'discreto', this)">Discreto</button>
+              <button type="button" class="chip-btn" onclick="answerS2('d1', 'continuo', this)">Continuo</button>
+            </div>
+            <div class="feedback-banner" id="fb-d1"></div>
+          </div>
+
+          <div class="quiz-item" data-d="d2">
+            <p><strong>B.</strong> Estatura de un estudiante de 7mo grado (1,52 m).</p>
+            <div class="choice-row">
+              <button type="button" class="chip-btn" onclick="answerS2('d2', 'discreto', this)">Discreto</button>
+              <button type="button" class="chip-btn" onclick="answerS2('d2', 'continuo', this)">Continuo</button>
+            </div>
+            <div class="feedback-banner" id="fb-d2"></div>
+          </div>
+
+          <div class="quiz-item" data-d="d3">
+            <p><strong>C.</strong> Goles anotados en un partido escolar (3 goles).</p>
+            <div class="choice-row">
+              <button type="button" class="chip-btn" onclick="answerS2('d3', 'discreto', this)">Discreto</button>
+              <button type="button" class="chip-btn" onclick="answerS2('d3', 'continuo', this)">Continuo</button>
+            </div>
+            <div class="feedback-banner" id="fb-d3"></div>
+          </div>
+
+          <div class="quiz-item" data-d="d4">
+            <p><strong>D.</strong> Peso exacto de tu mochila escolar (4,35 kg).</p>
+            <div class="choice-row">
+              <button type="button" class="chip-btn" onclick="answerS2('d4', 'discreto', this)">Discreto</button>
+              <button type="button" class="chip-btn" onclick="answerS2('d4', 'continuo', this)">Continuo</button>
+            </div>
+            <div class="feedback-banner" id="fb-d4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="station-footer">
+        <span class="muted">Recuerda: contar = discreto · medir = continuo.</span>
+        <button type="button" class="btn btn-primary" id="complete-btn-2" onclick="completeStation(2)">
+          Completar Parada 2 y avanzar
+        </button>
+      </div>
+    </article>
+
+    <!-- PARADA 3: Frecuencia Absoluta y Acumulada -->
+    <article class="station-card card-wrapper" id="station-3" aria-labelledby="s3-title">
+      <div class="station-header">
+        <div>
+          <p class="kicker">Parada 3 de 5 · Tabla de frecuencias</p>
+          <h2 id="s3-title" class="section-title">Frecuencia <em>absoluta</em> y acumulada</h2>
+        </div>
+        <span class="station-status-pill" id="status-pill-3">Pendiente</span>
+      </div>
+
+      <p>
+        Una <strong>tabla de frecuencias</strong> ordena cada categoría junto al conteo de cuántas veces aparece. Veamos los dos primeros valores clave:
+      </p>
+
+      <div class="concept-grid">
+        <div class="mini-card">
+          <strong style="color: var(--primary);">Frecuencia absoluta</strong>
+          <p>Es el número exacto de veces que se repite cada dato. Al sumar todas, obtenemos el <strong>total de datos</strong>.</p>
+        </div>
+        <div class="mini-card is-sky">
+          <strong style="color: var(--on-surface);">Frecuencia acumulada</strong>
+          <p>Es la <strong>suma progresiva</strong> fila por fila de las frecuencias absolutas, hasta completar el total.</p>
+        </div>
+      </div>
+
+      <!-- Interactive Canvas 3: Live Classroom Dessert Survey -->
+      <div class="interactive-well" aria-labelledby="s3-lab-title">
+        <div class="well-header">
+          <div>
+            <p class="kicker">Encuesta real de 7mo grado</p>
+            <h3 id="s3-lab-title" class="subhead">Postre favorito: suma o resta votos en vivo</h3>
+          </div>
+          <button type="button" class="btn btn-soft" onclick="resetDesserts()">
+            Restaurar libro (55)
+          </button>
+        </div>
+
+        <div class="kpi-strip">
+          <div class="kpi-tile">
+            <span class="kicker">Total encuestados</span>
+            <span class="kpi-value" id="s3-total-kpi">55</span>
+            <span class="muted">Suma de frecuencias</span>
+          </div>
+          <div class="kpi-tile">
+            <span class="kicker">Postre más votado</span>
+            <span class="kpi-value" id="s3-leader-kpi" style="font-size: 1.25rem; color: var(--secondary);">Tres leches</span>
+            <span class="muted" id="s3-leader-votes">15 votos</span>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="freq-table" aria-label="Tabla interactiva de postres favoritos">
+            <thead>
+              <tr>
+                <th>Postre</th>
+                <th>Conteo</th>
+                <th style="text-align: center;">Votar (+ / −)</th>
+                <th style="text-align: right;">Frec. absoluta</th>
+                <th style="text-align: right;">Frec. acumulada</th>
+              </tr>
+            </thead>
+            <tbody id="desserts-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3">Total de datos</td>
+                <td class="num-cell" id="desserts-total-abs">55</td>
+                <td class="num-cell" id="desserts-total-cum">Termina en 55</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <p class="muted" id="s3-cum-explainer">
+          Observa la última columna: empieza en 15, suma 7 (15 + 7 = 22) y así sigue hasta igualar el total.
+        </p>
+      </div>
+
+      <div class="station-footer">
+        <span class="muted">Dato curioso: la última frecuencia acumulada siempre coincide con el total.</span>
+        <button type="button" class="btn btn-primary" id="complete-btn-3" onclick="completeStation(3)">
+          Completar Parada 3 y avanzar
+        </button>
+      </div>
+    </article>
+
+    <!-- PARADA 4: Frecuencia Relativa -->
+    <article class="station-card card-wrapper" id="station-4" aria-labelledby="s4-title">
+      <div class="station-header">
+        <div>
+          <p class="kicker">Parada 4 de 5 · Proporciones</p>
+          <h2 id="s4-title" class="section-title">La frecuencia <em>relativa</em> en 3 formatos</h2>
+        </div>
+        <span class="station-status-pill" id="status-pill-4">Pendiente</span>
+      </div>
+
+      <div class="split-grid">
+        <div style="display: grid; gap: var(--space-sm);">
+          <p>
+            La <strong>frecuencia relativa</strong> nos dice qué parte del total representa cada categoría. Se calcula dividiendo la frecuencia absoluta entre el total de datos:
+          </p>
+          <span class="formula-pill">Frec. relativa = Frec. absoluta ÷ Total</span>
+          <p class="muted">
+            Se puede expresar como <strong>fracción</strong>, como <strong>decimal</strong> (su suma siempre da <strong>1</strong>) o como <strong>porcentaje</strong> (su suma da <strong>100%</strong>).
+          </p>
+        </div>
+
+        <div class="illustration-box">
+          <svg viewBox="0 0 280 175" aria-hidden="true">
+            <rect x="14" y="16" width="252" height="142" rx="18" fill="var(--surface-container-low)" stroke="var(--secondary)" stroke-width="3"></rect>
+            <text x="140" y="42" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="800">Ejemplo: 40 de 80 clientes</text>
+            <!-- Whole bar divided in half -->
+            <rect x="30" y="56" width="220" height="32" rx="16" fill="var(--surface-container-high)"></rect>
+            <rect x="30" y="56" width="110" height="32" rx="16" fill="var(--primary)"></rect>
+            <text x="85" y="77" text-anchor="middle" fill="var(--on-primary)" font-size="13" font-weight="800">40 (la mitad)</text>
+            <text x="195" y="77" text-anchor="middle" fill="var(--on-surface-variant)" font-size="12" font-weight="700">resto: 40</text>
+            <!-- 3 badges -->
+            <rect x="26" y="106" width="70" height="32" rx="16" fill="var(--primary-container)"></rect>
+            <text x="61" y="126" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="800">40/80</text>
+
+            <rect x="105" y="106" width="70" height="32" rx="16" fill="var(--tertiary-container)"></rect>
+            <text x="140" y="126" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="800">0,500</text>
+
+            <rect x="184" y="106" width="70" height="32" rx="16" fill="var(--secondary-container)"></rect>
+            <text x="219" y="126" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="800">50%</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Interactive Canvas 4: Bank Service Survey (80 people) -->
+      <div class="interactive-well" aria-labelledby="s4-lab-title">
+        <div class="well-header">
+          <div>
+            <p class="kicker">Encuesta bancaria (80 personas)</p>
+            <h3 id="s4-lab-title" class="subhead">Cambia el formato y toca cualquier fila</h3>
+          </div>
+        </div>
+
+        <div class="segmented" role="group" aria-label="Formato de frecuencia relativa">
+          <button type="button" class="seg-btn is-active" id="mode-fraction" onclick="setRelMode('fraction')">Fracción</button>
+          <button type="button" class="seg-btn" id="mode-decimal" onclick="setRelMode('decimal')">Decimal</button>
+          <button type="button" class="seg-btn" id="mode-percent" onclick="setRelMode('percent')">Porcentaje</button>
+        </div>
+
+        <div class="table-scroll">
+          <table class="freq-table" aria-label="Tabla de opinión sobre servicio bancario">
+            <thead>
+              <tr>
+                <th>Opinión</th>
+                <th style="text-align: right;">Frec. absoluta</th>
+                <th style="text-align: right;">Frec. acumulada</th>
+                <th style="text-align: right;" id="rel-col-header">Frec. relativa (fracción)</th>
+              </tr>
+            </thead>
+            <tbody id="bank-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td class="num-cell">80</td>
+                <td class="num-cell">—</td>
+                <td class="num-cell" id="bank-total-rel">80/80 = 1</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="mini-card is-grape" id="bank-row-detail">
+          <strong style="color: var(--secondary);">Cálculo paso a paso (Muy buena):</strong>
+          <span>40 ÷ 80 = 0,500 (equivale al 50% de las 80 personas encuestadas).</span>
+        </div>
+
+        <div class="quiz-item" data-r="relQuiz">
+          <p><strong>Mini reto rápido:</strong> Si sumas todas las frecuencias relativas expresadas en <strong>decimales</strong>, ¿cuánto da el total?</p>
+          <div class="choice-row">
+            <button type="button" class="chip-btn" onclick="answerS4('0.5', this)">0,500</button>
+            <button type="button" class="chip-btn" onclick="answerS4('1', this)">1,000</button>
+            <button type="button" class="chip-btn" onclick="answerS4('80', this)">80</button>
+          </div>
+          <div class="feedback-banner" id="fb-relQuiz"></div>
+        </div>
+      </div>
+
+      <div class="station-footer">
+        <span class="muted">Toca las filas de la tabla para comprobar cada división.</span>
+        <button type="button" class="btn btn-primary" id="complete-btn-4" onclick="completeStation(4)">
+          Completar Parada 4 y avanzar
+        </button>
+      </div>
+    </article>
+
+    <!-- PARADA 5: Diagramas de Barras -->
+    <article class="station-card card-wrapper" id="station-5" aria-labelledby="s5-title">
+      <div class="station-header">
+        <div>
+          <p class="kicker">Parada 5 de 5 · Representación visual</p>
+          <h2 id="s5-title" class="section-title">Diagramas de <em>barras</em> en acción</h2>
+        </div>
+        <span class="station-status-pill" id="status-pill-5">Pendiente</span>
+      </div>
+
+      <p>
+        Un <strong>diagrama de barras</strong> dibuja rectángulos proporcionales a cada frecuencia absoluta. Sirve para comparar de un vistazo qué categoría ganó y cuál obtuvo menos respuestas, igual que los gráficos que ves en periódicos y noticias deportivas.
+      </p>
+
+      <!-- Interactive Canvas 5: Interactive Bar Chart Explorer -->
+      <div class="interactive-well" aria-labelledby="s5-lab-title">
+        <div class="well-header">
+          <div>
+            <p class="kicker">Canvas interactivo</p>
+            <h3 id="s5-lab-title" class="subhead">Elige una encuesta y toca cualquier barra</h3>
+          </div>
+        </div>
+
+        <div class="segmented" role="group" aria-label="Elegir datos del diagrama de barras">
+          <button type="button" class="seg-btn is-active" id="ds-desserts" onclick="setChartDataset('desserts')">Postres (55)</button>
+          <button type="button" class="seg-btn" id="ds-bank" onclick="setChartDataset('bank')">Banco (80)</button>
+          <button type="button" class="seg-btn" id="ds-sports" onclick="setChartDataset('sports')">Tu encuesta</button>
+        </div>
+
+        <div class="chart-card">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-xs);">
+            <strong class="subhead" id="chart-title">Postre favorito en 7mo grado</strong>
+            <span class="tag" id="chart-total-tag">N = 55</span>
+          </div>
+
+          <div class="chart-box" id="bar-chart-box">
+            <!-- Rendered dynamically by JS -->
+          </div>
+
+          <div class="chart-tooltip-pill" id="chart-tooltip">
+            <span id="tooltip-label"><strong>Tres leches</strong> es la categoría seleccionada</span>
+            <span class="badge" id="tooltip-value">15 votos · 27,3%</span>
+          </div>
+        </div>
+
+        <!-- Custom Sport Poll Controls (shown when "Tu encuesta" is active) -->
+        <div id="custom-poll-controls" style="display: none; gap: var(--space-sm);">
+          <p class="muted"><strong>Ajusta los votos de tu propia encuesta deportiva</strong> y mira cómo cambian las barras al instante:</p>
+          <div class="concept-grid" id="sports-controls-grid"></div>
+        </div>
+      </div>
+
+      <div class="station-footer">
+        <span class="muted">¡Última parada! Cruza la meta para completar tu repaso.</span>
+        <button type="button" class="btn btn-positive" id="complete-btn-5" onclick="completeStation(5)">
+          Completar Parada 5 y cruzar la meta
+        </button>
+      </div>
+    </article>
+
+    <!-- Finish Line Celebration Banner -->
+    <section class="finish-banner" id="finish-banner" aria-labelledby="finish-title">
+      <div class="hero-top">
+        <span class="badge">Meta alcanzada · 100%</span>
+        <span class="tag">5 de 5 paradas listas</span>
+      </div>
+      <h2 id="finish-title" class="section-title">¡Llegaste a la <em>meta</em> de Estadística!</h2>
+      <p>
+        El carrito completó todo el circuito. Ya repasaste cómo diseñar preguntas de encuesta, distinguir datos discretos de continuos, calcular frecuencias absolutas, acumuladas y relativas, y comparar resultados en un diagrama de barras.
+      </p>
+      <div class="kpi-strip">
+        <div class="kpi-tile">
+          <span class="kicker">Paradas superadas</span>
+          <span class="kpi-value" id="finish-stations-count">5 / 5</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kicker">Retos resueltos</span>
+          <span class="kpi-value" id="finish-challenges-count">0 / 8</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button type="button" class="btn btn-secondary" onclick="scrollToStation(1)">Repasar desde el inicio</button>
+      </div>
+    </section>
+
+    <footer class="sources-note">
+      <span>Basado en contenidos de Matemáticas 7mo grado: encuestas, datos discretos y continuos, tablas de frecuencias y diagramas de barras.</span>
+      <span id="save-indicator">Progreso guardado</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // Grounded datasets from 7th grade math source material
+    const INITIAL_DESSERTS = [
+      { id: `tres_leches`, name: `Tres leches`, count: 15 },
+      { id: `tiramisu`, name: `Tiramisú`, count: 7 },
+      { id: `higos`, name: `Higos con queso`, count: 12 },
+      { id: `pastel`, name: `Pastel`, count: 11 },
+      { id: `gelatina`, name: `Gelatina`, count: 7 },
+      { id: `frutillas`, name: `Frutillas con crema`, count: 3 }
+    ];
+
+    const BANK_DATA = [
+      { id: `excelente`, name: `Excelente`, abs: 25, cum: 25, dec: `0,313`, pct: `31,3%` },
+      { id: `muy_buena`, name: `Muy buena`, abs: 40, cum: 65, dec: `0,500`, pct: `50,0%` },
+      { id: `buena`, name: `Buena`, abs: 10, cum: 75, dec: `0,125`, pct: `12,5%` },
+      { id: `regular`, name: `Regular`, abs: 3, cum: 78, dec: `0,037`, pct: `3,7%` },
+      { id: `mala`, name: `Mala`, abs: 2, cum: 80, dec: `0,025`, pct: `2,5%` }
+    ];
+
+    const INITIAL_SPORTS = [
+      { id: `futbol`, name: `Fútbol`, count: 14 },
+      { id: `basquet`, name: `Básquet`, count: 9 },
+      { id: `voley`, name: `Vóley`, count: 11 },
+      { id: `natacion`, name: `Natación`, count: 6 }
+    ];
+
+    const S1_KEY = {
+      q1: {
+        answer: `cerrada`,
+        ok: `¡Exacto! Es cerrada porque da cinco opciones fijas para marcar.`,
+        retry: `Intenta de nuevo: la persona no escribe libremente, solo elige entre 5 opciones fijas.`
+      },
+      q2: {
+        answer: `abierta`,
+        ok: `¡Correcto! Es abierta porque permite responder con tus propias palabras.`,
+        retry: `Pista: no hay lista de opciones para marcar, es respuesta libre.`
+      },
+      q3: {
+        answer: `mixta`,
+        ok: `¡Muy bien! Es mixta porque combina opciones cerradas con una pregunta abierta («por qué»).`,
+        retry: `Fíjate bien: primero da opciones fijas y luego pide explicar libremente.`
+      }
+    };
+
+    const S2_KEY = {
+      d1: {
+        answer: `discreto`,
+        ok: `¡Correcto! Contar personas o votos siempre da números enteros (discreto).`,
+        retry: `Recuerda: ¿puedes tener 15,4 votos? No, porque es un conteo exacto.`
+      },
+      d2: {
+        answer: `continuo`,
+        ok: `¡Exacto! La estatura se mide y usa decimales como 1,52 m.`,
+        retry: `Pista: la estatura viene de una medición y admite decimales.`
+      },
+      d3: {
+        answer: `discreto`,
+        ok: `¡Así es! Los goles se cuentan en enteros: 0, 1, 2, 3…`,
+        retry: `Piensa: ¿se puede anotar medio gol? Se trata de un conteo entero.`
+      },
+      d4: {
+        answer: `continuo`,
+        ok: `¡Muy bien! El peso en kilogramos es una medición continua con decimales.`,
+        retry: `Pista: al pesar en una balanza pueden salir valores con decimales como 4,35 kg.`
+      }
+    };
+
+    const BAR_COLORS = [`var(--data-1)`, `var(--data-2)`, `var(--data-3)`, `var(--data-4)`, `var(--data-1)`, `var(--data-2)`];
+
+    let appState = {
+      completedStations: [],
+      currentStation: 1,
+      s1Answers: {},
+      s2Answers: {},
+      s4Answer: null,
+      desserts: INITIAL_DESSERTS.map(d => ({ ...d })),
+      sports: INITIAL_SPORTS.map(s => ({ ...s })),
+      relMode: `fraction`,
+      selectedBankRow: `muy_buena`,
+      chartDataset: `desserts`,
+      selectedBarIndex: 0
+    };
+
+    // State persistence helpers
+    async function persistState() {
+      const saveInd = document.getElementById(`save-indicator`);
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+          if (saveInd) saveInd.textContent = `Progreso guardado`;
+        }
+      } catch (err) {
+        if (saveInd) saveInd.textContent = `Modo sin conexión`;
+      }
+    }
+
+    function updateProgressTrack() {
+      const doneCount = appState.completedStations.length;
+      const pct = Math.round((doneCount / 5) * 100);
+
+      const statusText = document.getElementById(`race-status-text`);
+      const pctBadge = document.getElementById(`race-percent-badge`);
+      const roadFill = document.getElementById(`road-fill`);
+      const trackStage = document.getElementById(`track-stage`);
+      const carRunner = document.getElementById(`car-runner`);
+
+      if (statusText) {
+        statusText.textContent = doneCount === 5
+          ? `¡Recorrido completo: 5 de 5 paradas!`
+          : `Progreso: ${doneCount} de 5 paradas completadas`;
+      }
+      if (pctBadge) pctBadge.textContent = `${pct}%`;
+      if (roadFill) roadFill.style.transform = `scaleX(${doneCount / 5})`;
+
+      if (trackStage && carRunner) {
+        const trackWidth = trackStage.clientWidth || 280;
+        const carWidth = carRunner.offsetWidth || 44;
+        const maxTravel = Math.max(0, trackWidth - carWidth);
+        const offsetPx = Math.round((doneCount / 5) * maxTravel);
+        carRunner.style.transform = `translateX(${offsetPx}px)`;
+      }
+
+      for (let i = 1; i <= 5; i++) {
+        const cp = document.getElementById(`cp-${i}`);
+        const pill = document.getElementById(`status-pill-${i}`);
+        const btn = document.getElementById(`complete-btn-${i}`);
+        const isDone = appState.completedStations.includes(i);
+        const isCurrent = appState.currentStation === i;
+
+        if (cp) {
+          cp.classList.toggle(`is-done`, isDone);
+          cp.classList.toggle(`is-current`, !isDone && isCurrent);
+        }
+        if (pill) {
+          pill.classList.toggle(`is-done`, isDone);
+          pill.textContent = isDone ? `Completada` : (isCurrent ? `En curso` : `Pendiente`);
+        }
+        if (btn) {
+          if (i < 5) {
+            btn.textContent = isDone
+              ? `Parada ${i} completada — Ir a la ${i + 1}`
+              : `Completar Parada ${i} y avanzar`;
+          } else {
+            btn.textContent = isDone
+              ? `¡Meta alcanzada! Ver resumen`
+              : `Completar Parada 5 y cruzar la meta`;
+          }
+        }
+      }
+
+      updateFinishBanner();
+    }
+
+    function updateFinishBanner() {
+      const banner = document.getElementById(`finish-banner`);
+      const stCount = document.getElementById(`finish-stations-count`);
+      const chCount = document.getElementById(`finish-challenges-count`);
+      const done = appState.completedStations.length;
+
+      let solved = 0;
+      Object.keys(S1_KEY).forEach(k => {
+        if (appState.s1Answers[k] === S1_KEY[k].answer) solved++;
+      });
+      Object.keys(S2_KEY).forEach(k => {
+        if (appState.s2Answers[k] === S2_KEY[k].answer) solved++;
+      });
+      if (appState.s4Answer === `1`) solved++;
+
+      if (stCount) stCount.textContent = `${done} / 5`;
+      if (chCount) chCount.textContent = `${solved} / 8`;
+      if (banner) banner.classList.toggle(`is-visible`, done === 5);
+    }
+
+    function scrollToStation(num) {
+      appState.currentStation = num;
+      updateProgressTrack();
+      const target = document.getElementById(`station-${num}`);
+      if (target) {
+        target.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+      persistState();
+    }
+
+    function completeStation(num) {
+      if (!appState.completedStations.includes(num)) {
+        appState.completedStations.push(num);
+        appState.completedStations.sort((a, b) => a - b);
+      }
+      if (num < 5) {
+        appState.currentStation = num + 1;
+        updateProgressTrack();
+        const nextEl = document.getElementById(`station-${num + 1}`);
+        if (nextEl) nextEl.scrollIntoView({ behavior: `smooth`, block: `start` });
+      } else {
+        appState.currentStation = 5;
+        updateProgressTrack();
+        const finishEl = document.getElementById(`finish-banner`);
+        if (finishEl) finishEl.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+      persistState();
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Toca otra vez para reiniciar`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reiniciar recorrido`;
+
+      appState = {
+        completedStations: [],
+        currentStation: 1,
+        s1Answers: {},
+        s2Answers: {},
+        s4Answer: null,
+        desserts: INITIAL_DESSERTS.map(d => ({ ...d })),
+        sports: INITIAL_SPORTS.map(s => ({ ...s })),
+        relMode: `fraction`,
+        selectedBankRow: `muy_buena`,
+        chartDataset: `desserts`,
+        selectedBarIndex: 0
+      };
+
+      renderAllInteractiveSections();
+      updateProgressTrack();
+      persistState();
+    }
+
+    // Station 1 Quiz
+    function answerS1(qId, choice, btnEl) {
+      appState.s1Answers[qId] = choice;
+      renderS1Quiz();
+      persistState();
+    }
+
+    function renderS1Quiz() {
+      let correctCount = 0;
+      Object.keys(S1_KEY).forEach(qId => {
+        const chosen = appState.s1Answers[qId];
+        const info = S1_KEY[qId];
+        const box = document.querySelector(`.quiz-item[data-q="${qId}"]`);
+        const fb = document.getElementById(`fb-${qId}`);
+        if (!box || !fb) return;
+
+        const buttons = box.querySelectorAll(`.chip-btn`);
+        const mapValues = [`abierta`, `cerrada`, `mixta`];
+        buttons.forEach((b, idx) => {
+          const val = mapValues[idx];
+          b.classList.remove(`is-selected`, `is-correct`, `is-wrong`);
+          if (chosen === val) {
+            b.classList.add(val === info.answer ? `is-correct` : `is-wrong`);
+          }
+        });
+
+        if (chosen) {
+          fb.classList.add(`is-visible`);
+          if (chosen === info.answer) {
+            correctCount++;
+            fb.classList.remove(`is-retry`);
+            fb.classList.add(`is-ok`);
+            fb.textContent = info.ok;
+          } else {
+            fb.classList.remove(`is-ok`);
+            fb.classList.add(`is-retry`);
+            fb.textContent = info.retry;
+          }
+        } else {
+          fb.classList.remove(`is-visible`, `is-ok`, `is-retry`);
+          fb.textContent = ``;
+        }
+      });
+
+      const badge = document.getElementById(`s1-score-badge`);
+      if (badge) badge.textContent = `${correctCount} / 3 listas`;
+      updateFinishBanner();
+    }
+
+    // Station 2 Quiz
+    function answerS2(dId, choice, btnEl) {
+      appState.s2Answers[dId] = choice;
+      renderS2Quiz();
+      persistState();
+    }
+
+    function renderS2Quiz() {
+      let correctCount = 0;
+      Object.keys(S2_KEY).forEach(dId => {
+        const chosen = appState.s2Answers[dId];
+        const info = S2_KEY[dId];
+        const box = document.querySelector(`.quiz-item[data-d="${dId}"]`);
+        const fb = document.getElementById(`fb-${dId}`);
+        if (!box || !fb) return;
+
+        const buttons = box.querySelectorAll(`.chip-btn`);
+        const mapValues = [`discreto`, `continuo`];
+        buttons.forEach((b, idx) => {
+          const val = mapValues[idx];
+          b.classList.remove(`is-selected`, `is-correct`, `is-wrong`);
+          if (chosen === val) {
+            b.classList.add(val === info.answer ? `is-correct` : `is-wrong`);
+          }
+        });
+
+        if (chosen) {
+          fb.classList.add(`is-visible`);
+          if (chosen === info.answer) {
+            correctCount++;
+            fb.classList.remove(`is-retry`);
+            fb.classList.add(`is-ok`);
+            fb.textContent = info.ok;
+          } else {
+            fb.classList.remove(`is-ok`);
+            fb.classList.add(`is-retry`);
+            fb.textContent = info.retry;
+          }
+        } else {
+          fb.classList.remove(`is-visible`, `is-ok`, `is-retry`);
+          fb.textContent = ``;
+        }
+      });
+
+      const badge = document.getElementById(`s2-score-badge`);
+      if (badge) badge.textContent = `${correctCount} / 4 listas`;
+      updateFinishBanner();
+    }
+
+    // Station 3: Desserts interactive frequency table
+    function makeTallyString(count) {
+      if (count <= 0) return `0`;
+      const groups = Math.floor(count / 5);
+      const rem = count % 5;
+      const parts = [];
+      for (let i = 0; i < groups; i++) parts.push(`/////`);
+      if (rem > 0) parts.push(`/`.repeat(rem));
+      return parts.join(` `);
+    }
+
+    function adjustDessert(index, delta) {
+      const item = appState.desserts[index];
+      if (!item) return;
+      const next = Math.max(0, Math.min(35, item.count + delta));
+      if (next === item.count) return;
+      item.count = next;
+      renderDessertsTable();
+      if (appState.chartDataset === `desserts`) renderBarChart();
+      persistState();
+    }
+
+    function resetDesserts() {
+      appState.desserts = INITIAL_DESSERTS.map(d => ({ ...d }));
+      renderDessertsTable();
+      if (appState.chartDataset === `desserts`) renderBarChart();
+      persistState();
+    }
+
+    function renderDessertsTable() {
+      const tbody = document.getElementById(`desserts-tbody`);
+      const totalAbsEl = document.getElementById(`desserts-total-abs`);
+      const totalCumEl = document.getElementById(`desserts-total-cum`);
+      const totalKpi = document.getElementById(`s3-total-kpi`);
+      const leaderKpi = document.getElementById(`s3-leader-kpi`);
+      const leaderVotes = document.getElementById(`s3-leader-votes`);
+      const explainer = document.getElementById(`s3-cum-explainer`);
+      if (!tbody) return;
+
+      let running = 0;
+      let maxItem = appState.desserts[0];
+      let html = ``;
+
+      appState.desserts.forEach((item, idx) => {
+        const prev = running;
+        running += item.count;
+        if (item.count > maxItem.count) maxItem = item;
+        const stepFormula = idx === 0 ? `${item.count}` : `${prev} + ${item.count} = ${running}`;
+        html += `
+          <tr>
+            <td><strong>${item.name}</strong></td>
+            <td><span class="tally-text">${makeTallyString(item.count)}</span></td>
+            <td style="text-align: center;">
+              <div class="stepper-group">
+                <button type="button" class="step-mini-btn" onclick="adjustDessert(${idx}, -1)" aria-label="Restar 1 voto a ${item.name}">−</button>
+                <button type="button" class="step-mini-btn" onclick="adjustDessert(${idx}, 1)" aria-label="Sumar 1 voto a ${item.name}">+</button>
+              </div>
+            </td>
+            <td class="num-cell">${item.count}</td>
+            <td class="num-cell"><span class="cum-badge">${stepFormula}</span></td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+      if (totalAbsEl) totalAbsEl.textContent = `${running}`;
+      if (totalCumEl) totalCumEl.textContent = `Termina en ${running}`;
+      if (totalKpi) totalKpi.textContent = `${running}`;
+      if (leaderKpi) leaderKpi.textContent = maxItem.name;
+      if (leaderVotes) leaderVotes.textContent = `${maxItem.count} votos`;
+
+      const first = appState.desserts[0];
+      const second = appState.desserts[1];
+      if (explainer && first && second) {
+        explainer.textContent = `La columna acumulada empieza en ${first.count}, luego suma ${second.count} (${first.count} + ${second.count} = ${first.count + second.count}) y termina exactamente en ${running}.`;
+      }
+    }
+
+    // Station 4: Bank table & relative frequency mode
+    function setRelMode(mode) {
+      appState.relMode = mode;
+      renderBankTable();
+      persistState();
+    }
+
+    function selectBankRow(rowId) {
+      appState.selectedBankRow = rowId;
+      renderBankTable();
+      persistState();
+    }
+
+    function renderBankTable() {
+      const tbody = document.getElementById(`bank-tbody`);
+      const colHeader = document.getElementById(`rel-col-header`);
+      const totalRelEl = document.getElementById(`bank-total-rel`);
+      const detailBox = document.getElementById(`bank-row-detail`);
+
+      const modeBtns = {
+        fraction: document.getElementById(`mode-fraction`),
+        decimal: document.getElementById(`mode-decimal`),
+        percent: document.getElementById(`mode-percent`)
+      };
+      Object.keys(modeBtns).forEach(k => {
+        if (modeBtns[k]) modeBtns[k].classList.toggle(`is-active`, appState.relMode === k);
+      });
+
+      if (colHeader) {
+        if (appState.relMode === `fraction`) colHeader.textContent = `Frec. relativa (fracción)`;
+        else if (appState.relMode === `decimal`) colHeader.textContent = `Frec. relativa (decimal)`;
+        else colHeader.textContent = `Frec. relativa (%)`;
+      }
+
+      if (totalRelEl) {
+        if (appState.relMode === `fraction`) totalRelEl.textContent = `80/80 = 1`;
+        else if (appState.relMode === `decimal`) totalRelEl.textContent = `1,000`;
+        else totalRelEl.textContent = `100,0%`;
+      }
+
+      if (!tbody) return;
+      let html = ``;
+      let selectedObj = BANK_DATA[1];
+
+      BANK_DATA.forEach(row => {
+        const isSel = row.id === appState.selectedBankRow;
+        if (isSel) selectedObj = row;
+        let relDisplay = `${row.abs}/80`;
+        if (appState.relMode === `decimal`) relDisplay = row.dec;
+        else if (appState.relMode === `percent`) relDisplay = row.pct;
+
+        html += `
+          <tr class="is-interactive-row ${isSel ? `is-focused-row` : ``}" onclick="selectBankRow('${row.id}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectBankRow('${row.id}');}">
+            <td><strong>${row.name}</strong></td>
+            <td class="num-cell">${row.abs}</td>
+            <td class="num-cell">${row.cum}</td>
+            <td class="num-cell">${relDisplay}</td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+
+      if (detailBox && selectedObj) {
+        detailBox.innerHTML = `
+          <strong style="color: var(--secondary);">Cálculo paso a paso (${selectedObj.name}):</strong>
+          <span>${selectedObj.abs} ÷ 80 = <strong>${selectedObj.dec}</strong> (equivale a <strong>${selectedObj.pct}</strong> de las 80 personas).</span>
+        `;
+      }
+    }
+
+    function answerS4(choice, btnEl) {
+      appState.s4Answer = choice;
+      renderS4Quiz();
+      persistState();
+    }
+
+    function renderS4Quiz() {
+      const box = document.querySelector(`.quiz-item[data-r="relQuiz"]`);
+      const fb = document.getElementById(`fb-relQuiz`);
+      if (!box || !fb) return;
+
+      const vals = [`0.5`, `1`, `80`];
+      const buttons = box.querySelectorAll(`.chip-btn`);
+      buttons.forEach((b, idx) => {
+        const v = vals[idx];
+        b.classList.remove(`is-correct`, `is-wrong`);
+        if (appState.s4Answer === v) {
+          b.classList.add(v === `1` ? `is-correct` : `is-wrong`);
+        }
+      });
+
+      if (appState.s4Answer) {
+        fb.classList.add(`is-visible`);
+        if (appState.s4Answer === `1`) {
+          fb.classList.remove(`is-retry`);
+          fb.classList.add(`is-ok`);
+          fb.textContent = `¡Exacto! Todas las partes juntas forman la unidad completa: 1,000 (o 100%).`;
+        } else {
+          fb.classList.remove(`is-ok`);
+          fb.classList.add(`is-retry`);
+          fb.textContent = `Casi: 80 es el total de personas, pero al dividir cada frecuencia por 80 y sumar los decimales siempre obtienes 1,000.`;
+        }
+      } else {
+        fb.classList.remove(`is-visible`, `is-ok`, `is-retry`);
+        fb.textContent = ``;
+      }
+      updateFinishBanner();
+    }
+
+    // Station 5: Bar Chart Explorer
+    function setChartDataset(ds) {
+      appState.chartDataset = ds;
+      appState.selectedBarIndex = 0;
+      renderBarChart();
+      persistState();
+    }
+
+    function selectBar(idx) {
+      appState.selectedBarIndex = idx;
+      renderBarChart();
+      persistState();
+    }
+
+    function adjustSport(idx, delta) {
+      const sp = appState.sports[idx];
+      if (!sp) return;
+      const next = Math.max(0, Math.min(25, sp.count + delta));
+      if (next === sp.count) return;
+      sp.count = next;
+      renderBarChart();
+      persistState();
+    }
+
+    function renderBarChart() {
+      const dsBtns = {
+        desserts: document.getElementById(`ds-desserts`),
+        bank: document.getElementById(`ds-bank`),
+        sports: document.getElementById(`ds-sports`)
+      };
+      Object.keys(dsBtns).forEach(k => {
+        if (dsBtns[k]) dsBtns[k].classList.toggle(`is-active`, appState.chartDataset === k);
+      });
+
+      let items = [];
+      let title = ``;
+      if (appState.chartDataset === `desserts`) {
+        items = appState.desserts.map(d => ({ label: d.name, shortLabel: d.name.split(` `)[0], value: d.count }));
+        title = `Postre favorito en 7mo grado`;
+      } else if (appState.chartDataset === `bank`) {
+        items = BANK_DATA.map(b => ({ label: b.name, shortLabel: b.name.replace(`Muy buena`, `M. buena`), value: b.abs }));
+        title = `Opinión sobre el servicio bancario`;
+      } else {
+        items = appState.sports.map(s => ({ label: s.name, shortLabel: s.name, value: s.count }));
+        title = `Tu encuesta rápida de deportes`;
+      }
+
+      const customControls = document.getElementById(`custom-poll-controls`);
+      const sportsGrid = document.getElementById(`sports-controls-grid`);
+      if (customControls) {
+        customControls.style.display = appState.chartDataset === `sports` ? `grid` : `none`;
+      }
+      if (sportsGrid && appState.chartDataset === `sports`) {
+        sportsGrid.innerHTML = appState.sports.map((sp, i) => `
+          <div class="mini-card" style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm);">
+            <div>
+              <strong>${sp.name}</strong>
+              <div class="muted">${sp.count} votos</div>
+            </div>
+            <div class="stepper-group">
+              <button type="button" class="step-mini-btn" onclick="adjustSport(${i}, -1)" aria-label="Restar 1 voto a ${sp.name}">−</button>
+              <button type="button" class="step-mini-btn" onclick="adjustSport(${i}, 1)" aria-label="Sumar 1 voto a ${sp.name}">+</button>
+            </div>
+          </div>
+        `).join(``);
+      }
+
+      const total = items.reduce((acc, it) => acc + it.value, 0);
+      const maxVal = Math.max(5, ...items.map(it => it.value));
+      const yMax = Math.ceil(maxVal / 5) * 5;
+
+      const titleEl = document.getElementById(`chart-title`);
+      const tagEl = document.getElementById(`chart-total-tag`);
+      if (titleEl) titleEl.textContent = title;
+      if (tagEl) tagEl.textContent = `N = ${total}`;
+
+      const box = document.getElementById(`bar-chart-box`);
+      if (!box) return;
+
+      const svgW = 540;
+      const svgH = 260;
+      const padL = 38;
+      const padR = 16;
+      const padT = 26;
+      const padB = 46;
+      const plotW = svgW - padL - padR;
+      const plotH = svgH - padT - padB;
+
+      // Gridlines (4 steps)
+      let gridSvg = ``;
+      for (let g = 0; g <= 4; g++) {
+        const val = Math.round((yMax / 4) * g);
+        const y = padT + plotH - (g / 4) * plotH;
+        gridSvg += `
+          <line x1="${padL}" y1="${y}" x2="${svgW - padR}" y2="${y}" stroke="var(--outline-variant)" stroke-dasharray="5 5" stroke-width="1.5"></line>
+          <text x="${padL - 8}" y="${y + 4}" text-anchor="end" fill="var(--on-surface-variant)" font-size="11" font-weight="600">${val}</text>
+        `;
+      }
+
+      const slotW = plotW / items.length;
+      const barW = Math.min(54, slotW * 0.62);
+      const selIdx = Math.min(appState.selectedBarIndex, items.length - 1);
+
+      let barsSvg = ``;
+      items.forEach((it, i) => {
+        const barH = yMax > 0 ? Math.max(6, (it.value / yMax) * plotH) : 6;
+        const x = padL + i * slotW + (slotW - barW) / 2;
+        const y = padT + plotH - barH;
+        const cx = x + barW / 2;
+        const color = BAR_COLORS[i % BAR_COLORS.length];
+        const isSel = i === selIdx;
+        const opacity = isSel ? `1` : `0.85`;
+
+        barsSvg += `
+          <g class="bar-group ${isSel ? `is-selected` : ``}" onclick="selectBar(${i})" tabindex="0" role="button" aria-label="${it.label}: ${it.value}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectBar(${i});}">
+            <rect class="bar-rect" x="${x}" y="${y}" width="${barW}" height="${barH}" rx="12" fill="${color}" opacity="${opacity}" ${isSel ? `stroke="var(--on-surface)" stroke-width="2.5"` : ``}></rect>
+            <text x="${cx}" y="${y - 8}" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="900">${it.value}</text>
+            <text x="${cx}" y="${svgH - 20}" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11.5" font-weight="${isSel ? `800` : `600`}">${it.shortLabel}</text>
+          </g>
+        `;
+      });
+
+      box.innerHTML = `
+        <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="${title}">
+          ${gridSvg}
+          ${barsSvg}
+        </svg>
+      `;
+
+      const selItem = items[selIdx];
+      const pctText = total > 0 ? ((selItem.value / total) * 100).toFixed(1).replace(`.`, `,`) : `0,0`;
+      const tipLabel = document.getElementById(`tooltip-label`);
+      const tipVal = document.getElementById(`tooltip-value`);
+      if (tipLabel && selItem) tipLabel.innerHTML = `<strong>${selItem.label}</strong> (barra seleccionada)`;
+      if (tipVal && selItem) tipVal.textContent = `${selItem.value} votos · ${pctText}%`;
+    }
+
+    function renderAllInteractiveSections() {
+      renderS1Quiz();
+      renderS2Quiz();
+      renderDessertsTable();
+      renderBankTable();
+      renderS4Quiz();
+      renderBarChart();
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (Array.isArray(saved.completedStations)) appState.completedStations = saved.completedStations;
+            if (typeof saved.currentStation === `number`) appState.currentStation = saved.currentStation;
+            if (saved.s1Answers) appState.s1Answers = saved.s1Answers;
+            if (saved.s2Answers) appState.s2Answers = saved.s2Answers;
+            if (saved.s4Answer !== undefined) appState.s4Answer = saved.s4Answer;
+            if (Array.isArray(saved.desserts) && saved.desserts.length === INITIAL_DESSERTS.length) {
+              appState.desserts = saved.desserts;
+            }
+            if (Array.isArray(saved.sports) && saved.sports.length === INITIAL_SPORTS.length) {
+              appState.sports = saved.sports;
+            }
+            if (saved.relMode) appState.relMode = saved.relMode;
+            if (saved.selectedBankRow) appState.selectedBankRow = saved.selectedBankRow;
+            if (saved.chartDataset) appState.chartDataset = saved.chartDataset;
+            if (typeof saved.selectedBarIndex === `number`) appState.selectedBarIndex = saved.selectedBarIndex;
+          }
+        }
+      } catch (e) {
+        // Safe fallback to defaults
+      }
+
+      renderAllInteractiveSections();
+      updateProgressTrack();
+
+      window.addEventListener(`resize`, updateProgressTrack);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
