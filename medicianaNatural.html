@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="canopy">
+  <title>Medicina Tradicional Montuvia y el Poder de las Plantas Curativas — Séptimo año A</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..600&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (earth strata) */
+      --background: #faf6ef;
+      --surface-container-low: #f0eae0;
+      --surface-container: #e8e0d2;
+      --surface-container-high: #ddd3c2;
+
+      /* Ink */
+      --on-surface: #2a302b;
+      --on-surface-variant: #4a524b;
+
+      /* Lines */
+      --outline: #737872;
+      --outline-variant: #cbc5b8;
+
+      /* Accents */
+      --primary: #366948;
+      --on-primary: #ffffff;
+      --primary-container: #d8efe0;
+      --on-primary-container: #1f4d30;
+      --secondary: #5c635c;
+      --tertiary: #8f5822;
+      --tertiary-container: #f2d4a7;
+      --on-tertiary-container: #6e3f0c;
+      --error: #b83230;
+      --on-error: #ffffff;
+      --error-container: #fbe8e7;
+
+      /* Data series */
+      --data-1: #366948;
+      --data-2: #8f5822;
+      --data-3: #a85438;
+      --data-4: #4b6b78;
+      --data-context: #b5b0a3;
+
+      /* Fonts */
+      --font-headline: 'Literata', serif;
+      --font-body: 'Nunito Sans', sans-serif;
+      --font-label: 'Geist Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.625rem;
+      --rounded-lg: 1rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --shadow-soft: 0 4px 20px rgb(42 48 43 / 0.06);
+      --shadow-soft-hover: 0 8px 28px rgb(42 48 43 / 0.09);
+      --border-soft: 1px solid rgb(203 197 184 / 0.65);
+      --focus-glow: 0 0 0 4px rgb(54 105 72 / 0.18);
+
+      /* Shared semantic tokens */
+      --positive: #2d6a42;
+      --positive-container: #d8efe0;
+      --warning: #b06e1e;
+      --focus: var(--primary);
+
+      /* Type scale (Narrative, tuned for readability on phones and desktops) */
+      --display-size: clamp(2rem, 1.35rem + 2.8vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.4375rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 980px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      font-weight: 600;
+    }
+    p {
+      margin: 0;
+      max-width: 68ch;
+    }
+    ul, ol {
+      margin: 0;
+      padding-left: var(--space-lg);
+      max-width: 66ch;
+    }
+    li + li {
+      margin-top: var(--space-xs);
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      box-shadow: var(--focus-glow);
+    }
+
+    /* Typography roles */
+    .kicker {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .mono-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--secondary);
+    }
+    .hero-title {
+      font-size: var(--display-size);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+    .section-title {
+      font-size: var(--headline-size);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+    }
+    .card-title {
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+    }
+
+    /* Hero & Institutional Header */
+    .hero-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+      gap: var(--space-lg);
+      align-items: center;
+      padding-top: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--border-soft);
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .hero-lead {
+      color: var(--on-surface-variant);
+      font-size: var(--body-size);
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-sm);
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .meta-val {
+      font-weight: 700;
+      color: var(--on-surface);
+      font-size: 0.95rem;
+    }
+    .hero-art {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .hero-art svg {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      display: block;
+    }
+
+    /* Almanac Phenology / Segment Progress Strip */
+    .almanac-progress {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      box-shadow: var(--shadow-soft);
+    }
+    .season-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .season-cells {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .season-cell {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 var(--space-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--rounded);
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .season-cell:hover {
+      background: var(--surface-container);
+      transform: translateY(-1px);
+    }
+    .season-cell.is-prep {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+      font-weight: 700;
+    }
+    .season-cell.is-peak {
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 700;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+    .progress-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Cards & Containers (Canopy rules) */
+    .card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      border: 0;
+    }
+    .card.is-interactive {
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out);
+    }
+    .card.is-interactive:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft-hover);
+    }
+    .card.is-leaf-highlight {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .card.is-leaf-highlight h2,
+    .card.is-leaf-highlight h3,
+    .card.is-leaf-highlight p,
+    .card.is-leaf-highlight li {
+      color: var(--on-primary-container);
+    }
+    .card.is-ochre-tint {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+    }
+
+    /* Segment Sections */
+    .segment-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+      scroll-margin-top: var(--space-lg);
+    }
+    .segment-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+    .segment-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      min-height: 32px;
+    }
+    .status-badge.is-done {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .status-badge.is-ochre {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      min-width: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--rounded);
+      border: 0;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.975rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+      text-decoration: none;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--on-primary-container);
+    }
+    .btn-secondary {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-container-high);
+    }
+    .btn-ochre {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+    }
+    .btn-ochre:hover:not(:disabled) {
+      background: var(--surface-container-high);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Segment 1: Asymmetric Map + Info */
+    .split-asymmetric {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .map-container {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .map-svg {
+      width: 100%;
+      height: auto;
+      min-height: 260px;
+      max-height: 360px;
+      display: block;
+    }
+    .province-btn-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .province-pill {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      border: 0;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .province-pill:hover {
+      background: var(--surface-container-high);
+    }
+    .province-pill.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .map-hotspot {
+      cursor: pointer;
+      transition: opacity var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .map-hotspot:hover {
+      opacity: 0.88;
+    }
+
+    /* Orthography & Info callouts */
+    .callout-box {
+      background: var(--surface-container);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    /* Segment 2: Oral Transmission & Data Bars */
+    .oral-chain {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .oral-step {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .stat-bars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .stat-figure {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 1.75rem;
+      font-variant-numeric: lining-nums tabular-nums;
+      color: var(--primary);
+    }
+    .stat-figure.is-ochre { color: var(--tertiary); }
+    .stat-figure.is-clay { color: var(--data-3); }
+    .bar-bg {
+      height: 16px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+    }
+    .bar-val {
+      height: 100%;
+      border-radius: var(--rounded-full);
+    }
+    .bar-val.c1 { background: var(--data-1); }
+    .bar-val.c2 { background: var(--data-2); }
+    .bar-val.c3 { background: var(--data-3); }
+
+    /* Segment 3: Featured 3 Plants */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(275px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .plant-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .plant-illus {
+      background: var(--background);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 150px;
+    }
+    .plant-illus svg {
+      width: 100%;
+      max-width: 150px;
+      height: 120px;
+    }
+    .plant-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .plant-tab {
+      min-height: 44px;
+      flex: 1 1 auto;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      border: 0;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .plant-tab:hover {
+      background: var(--surface-container-high);
+    }
+    .plant-tab.is-selected {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .plant-detail-box {
+      background: var(--background);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      min-height: 112px;
+      font-size: 0.96rem;
+    }
+    .safety-note {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    /* Segment 4: Herbario Explorer */
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .filter-pill {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      border: 0;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .filter-pill:hover {
+      background: var(--surface-container-high);
+    }
+    .filter-pill.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .herbario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .herbario-item {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      border-bottom: var(--border-soft);
+    }
+    .scientific-name {
+      font-family: var(--font-headline);
+      font-style: italic;
+      color: var(--on-surface-variant);
+      font-size: 0.92rem;
+    }
+
+    /* Segment 5: Interactive Quest */
+    .quest-box {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .question-card {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .options-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      min-height: 44px;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--border-soft);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .option-btn.is-correct {
+      background: var(--positive-container);
+      color: var(--on-primary-container);
+      box-shadow: inset 0 0 0 2px var(--positive);
+    }
+    .option-btn.is-wrong {
+      background: var(--error-container);
+      color: var(--error);
+      box-shadow: inset 0 0 0 2px var(--error);
+    }
+    .feedback-msg {
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      display: none;
+    }
+    .feedback-msg.is-visible { display: block; }
+    .feedback-msg.is-ok {
+      background: var(--positive-container);
+      color: var(--on-primary-container);
+    }
+    .feedback-msg.is-err {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    /* Segment 6: Certificate Generator */
+    .cert-panel {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .input-group {
+      flex: 1 1 260px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .input-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+    }
+    .text-input {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      width: 100%;
+    }
+    .cert-canvas-wrap {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-sm);
+      border: var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    #certificate-canvas {
+      width: 100%;
+      max-width: 780px;
+      height: auto;
+      display: block;
+      border-radius: var(--rounded);
+    }
+    #certificate-img-preview {
+      width: 100%;
+      max-width: 780px;
+      height: auto;
+      display: none;
+      border-radius: var(--rounded);
+    }
+    .inline-msg {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--tertiary);
+      min-height: 1.4em;
+    }
+    .inline-msg.is-error {
+      color: var(--error);
+    }
+    .inline-msg.is-success {
+      color: var(--positive);
+    }
+
+    /* Container queries for plant and certificate cards */
+    .card-wrapper { container-type: inline-size; }
+    @container (min-width: 520px) {
+      .inner-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-md);
+      }
+    }
+    @container (max-width: 519px) {
+      .inner-two-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+      }
+    }
+
+    /* Footer */
+    .page-footer {
+      border-top: var(--border-soft);
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-xl);
+      color: var(--on-surface-variant);
+      font-size: 0.92rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    /* Scroll reveal */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out);
+    }
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile breakpoint */
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .hero-header {
+        grid-template-columns: 1fr;
+      }
+      .split-asymmetric {
+        grid-template-columns: 1fr;
+      }
+      .card, .plant-card, .quest-box, .cert-panel {
+        padding: var(--space-md);
+      }
+      .season-cell {
+        flex: 1 1 calc(33.33% - var(--space-sm));
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-item {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Print styles: print only the certificate cleanly when unlocked */
+    @media print {
+      body {
+        background: var(--background);
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-grid {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      .cert-canvas-wrap {
+        border: 0;
+        padding: 0;
+      }
+      #certificate-canvas,
+      #certificate-img-preview {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- HEADER INSTITUCIONAL -->
+    <header class="hero-header no-print">
+      <div class="hero-copy">
+        <span class="kicker">
+          <i data-lucide="sprout" width="16" height="16" aria-hidden="true"></i>
+          Ciencias Naturales · Aprendizaje Autónomo en Casa
+        </span>
+        <h1 class="hero-title">Medicina Tradicional Montuvia y el Poder de las Plantas Curativas</h1>
+        <p class="hero-lead">
+          ¡Hola! Hoy vas a descubrir cómo los abuelos y las familias del campo en la Costa del Ecuador cuidan su salud con plantas de la naturaleza. Avanza paso a paso, a tu propio ritmo, hasta ganar tu certificado.
+        </p>
+
+        <div class="meta-grid" aria-label="Ficha de la clase">
+          <div class="meta-item">
+            <span class="mono-label">Grado</span>
+            <span class="meta-val">Séptimo año A</span>
+          </div>
+          <div class="meta-item">
+            <span class="mono-label">Docente</span>
+            <span class="meta-val">Ing. Jury Navas, Mg.</span>
+          </div>
+          <div class="meta-item">
+            <span class="mono-label">Fecha</span>
+            <span class="meta-val">26 de noviembre de 2026</span>
+          </div>
+          <div class="meta-item">
+            <span class="mono-label">Libro guía</span>
+            <span class="meta-val">Ciencias Naturales 7, págs. 102–104</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <svg viewBox="0 0 260 220" role="img" aria-label="Ilustración botánica de hojas de mangle, flores de altamisa y tallos de valeriana">
+          <rect x="8" y="8" width="244" height="204" rx="18" fill="var(--primary-container)" opacity="0.45"/>
+          <!-- Rama principal -->
+          <path d="M130 198 C128 150, 125 110, 132 45" stroke="var(--primary)" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <!-- Hojas de Zaragoza (mangle) izquierda -->
+          <path d="M128 150 C96 144, 74 126, 70 105 C92 106, 114 122, 128 150 Z" fill="var(--primary)"/>
+          <path d="M126 112 C95 102, 78 82, 82 62 C102 68, 118 86, 126 112 Z" fill="var(--data-1)" opacity="0.88"/>
+          <!-- Hojas derecha -->
+          <path d="M130 135 C164 128, 186 110, 192 88 C168 90, 146 106, 130 135 Z" fill="var(--primary)"/>
+          <path d="M131 94 C158 84, 174 66, 170 46 C150 52, 138 70, 131 94 Z" fill="var(--data-1)" opacity="0.88"/>
+          <!-- Flores de Valeriana / Altamisa arriba -->
+          <circle cx="132" cy="38" r="11" fill="var(--tertiary-container)"/>
+          <circle cx="116" cy="46" r="8" fill="var(--tertiary)"/>
+          <circle cx="148" cy="46" r="8" fill="var(--tertiary)"/>
+          <circle cx="132" cy="24" r="7" fill="var(--data-3)"/>
+          <circle cx="132" cy="38" r="4" fill="var(--primary)"/>
+          <!-- Suelo curvo -->
+          <path d="M46 196 Q130 182 214 196" stroke="var(--tertiary)" stroke-width="4" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="mono-label">Herbario ilustrado de la Costa ecuatoriana</span>
+      </div>
+    </header>
+
+    <!-- ALMANAC PROGRESS STRIP -->
+    <section class="almanac-progress no-print" aria-label="Tu camino de aprendizaje autónomo">
+      <div class="season-strip">
+        <div>
+          <span class="mono-label">Tu ruta paso a paso</span>
+          <div id="progress-summary-text" style="font-weight: 700;">0 de 6 segmentos completados · Empieza por el Segmento 1</div>
+        </div>
+        <nav class="season-cells" aria-label="Saltar a un segmento">
+          <button type="button" class="season-cell is-prep" id="strip-s1" onclick="jumpToSegment('segmento-1')">S1</button>
+          <button type="button" class="season-cell" id="strip-s2" onclick="jumpToSegment('segmento-2')">S2</button>
+          <button type="button" class="season-cell" id="strip-s3" onclick="jumpToSegment('segmento-3')">S3</button>
+          <button type="button" class="season-cell" id="strip-s4" onclick="jumpToSegment('segmento-4')">S4</button>
+          <button type="button" class="season-cell" id="strip-s5" onclick="jumpToSegment('segmento-5')">S5</button>
+          <button type="button" class="season-cell" id="strip-s6" onclick="jumpToSegment('segmento-6')">S6</button>
+        </nav>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="main-progress-bar">
+        <div class="progress-fill" id="main-progress-fill"></div>
+      </div>
+      <div class="progress-meta">
+        <span class="mono-label" id="progress-percent-label">0 % completado</span>
+        <span class="mono-label">Trabajo individual · Sin grupos</span>
+      </div>
+    </section>
+
+    <main>
+      <div class="page-grid" style="padding: 0;">
+
+        <!-- SEGMENTO 1 -->
+        <section id="segmento-1" class="segment-section reveal-item no-print">
+          <div class="segment-header">
+            <div class="segment-title-wrap">
+              <span class="kicker">Segmento 1 de 6</span>
+              <h2 class="section-title">¿Quiénes son los montuvios y dónde viven?</h2>
+            </div>
+            <span class="status-badge" id="badge-s1">En curso</span>
+          </div>
+
+          <div class="split-asymmetric">
+            <div class="card" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <p>
+                Ecuador es un país muy diverso donde conviven pueblos nativos y mestizos. Entre ellos está el <strong>pueblo montuvio</strong>, formado por las familias campesinas de la <strong>Costa ecuatoriana</strong>, reconocidas oficialmente en la <strong>Constitución de 2008</strong>.
+              </p>
+              <p>
+                Ellos viven en las zonas rurales de cuatro provincias principales de la Costa: <strong>El Oro, Guayas, Los Ríos y Manabí</strong>. Como están rodeados de ríos, manglares y bosques húmedos, conocen muchísimas plantas que ayudan a calmar malestares.
+              </p>
+
+              <div class="callout-box">
+                <span class="mono-label">Dato curioso del libro (pág. 102)</span>
+                <p style="font-size: 0.96rem;">
+                  <strong>¿Montuvio con “v” o con “b”?</strong> La palabra general en el diccionario lleva “b”, pero en nuestro libro usamos <strong>“montuvio” con “v”</strong> para distinguir con respeto al campesino de la Costa ecuatoriana.
+                </p>
+              </div>
+            </div>
+
+            <div class="map-container">
+              <span class="mono-label">Toca una provincia para explorarla</span>
+              <svg class="map-svg" viewBox="0 0 320 290" role="img" aria-label="Mapa ilustrado de las provincias montuvias de la Costa del Ecuador">
+                <!-- Océano Pacífico -->
+                <rect x="8" y="8" width="304" height="274" rx="14" fill="var(--background)"/>
+                <text x="26" y="34" fill="var(--data-4)" font-family="var(--font-label)" font-size="11" font-weight="600">OCÉANO PACÍFICO</text>
+                <!-- Olas suaves -->
+                <path d="M22 100 Q40 94 58 100 T94 100" stroke="var(--data-4)" stroke-width="2" fill="none" opacity="0.45"/>
+                <path d="M26 165 Q44 159 62 165" stroke="var(--data-4)" stroke-width="2" fill="none" opacity="0.45"/>
+
+                <!-- Silueta de la Sierra / Oriente (contexto) -->
+                <path d="M180 26 L265 40 L288 120 L250 205 L210 268 L158 264 L168 185 L178 105 Z" fill="var(--surface-container-high)"/>
+                <text x="212" y="135" fill="var(--secondary)" font-family="var(--font-label)" font-size="10">SIERRA Y</text>
+                <text x="206" y="149" fill="var(--secondary)" font-family="var(--font-label)" font-size="10">AMAZONÍA</text>
+
+                <!-- Esmeraldas (contexto norte) -->
+                <path d="M126 24 L178 26 L174 72 L116 74 Z" fill="var(--surface-container)"/>
+                <text x="122" y="54" fill="var(--on-surface-variant)" font-family="var(--font-body)" font-size="10" font-weight="700">Esmeraldas</text>
+
+                <!-- Manabí -->
+                <path id="map-manabi" class="map-hotspot" onclick="selectProvince('manabi')" d="M88 76 L138 74 L132 146 L80 142 C72 118, 76 92, 88 76 Z" fill="var(--primary)" stroke="var(--background)" stroke-width="2.5"/>
+                <text x="86" y="114" fill="var(--on-primary)" font-family="var(--font-body)" font-size="11" font-weight="700" style="pointer-events:none;">Manabí</text>
+
+                <!-- Los Ríos -->
+                <path id="map-losrios" class="map-hotspot" onclick="selectProvince('losrios')" d="M138 74 L174 74 L172 152 L134 148 Z" fill="var(--tertiary-container)" stroke="var(--background)" stroke-width="2.5"/>
+                <text x="137" y="116" fill="var(--on-tertiary-container)" font-family="var(--font-body)" font-size="10" font-weight="700" style="pointer-events:none;">Los Ríos</text>
+
+                <!-- Guayas -->
+                <path id="map-guayas" class="map-hotspot" onclick="selectProvince('guayas')" d="M84 144 L170 152 L166 212 L106 208 C92 190, 82 168, 84 144 Z" fill="var(--tertiary-container)" stroke="var(--background)" stroke-width="2.5"/>
+                <text x="108" y="182" fill="var(--on-tertiary-container)" font-family="var(--font-body)" font-size="11" font-weight="700" style="pointer-events:none;">Guayas</text>
+
+                <!-- El Oro -->
+                <path id="map-eloro" class="map-hotspot" onclick="selectProvince('eloro')" d="M116 212 L166 214 L158 264 L112 252 Z" fill="var(--tertiary-container)" stroke="var(--background)" stroke-width="2.5"/>
+                <text x="122" y="242" fill="var(--on-tertiary-container)" font-family="var(--font-body)" font-size="11" font-weight="700" style="pointer-events:none;">El Oro</text>
+              </svg>
+
+              <div class="province-btn-row">
+                <button type="button" class="province-pill is-active" id="btn-prov-manabi" onclick="selectProvince('manabi')">Manabí</button>
+                <button type="button" class="province-pill" id="btn-prov-losrios" onclick="selectProvince('losrios')">Los Ríos</button>
+                <button type="button" class="province-pill" id="btn-prov-guayas" onclick="selectProvince('guayas')">Guayas</button>
+                <button type="button" class="province-pill" id="btn-prov-eloro" onclick="selectProvince('eloro')">El Oro</button>
+              </div>
+
+              <div class="callout-box" id="province-info-box" style="background: var(--background);">
+                <strong id="province-title">Manabí</strong>
+                <span id="province-desc">En los campos y colinas de Manabí, las familias cultivan y cuidan plantas curativas que pasan de abuelos a nietos.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="complete-btn-1" onclick="completeSegment(1)">
+              <i data-lucide="check-circle-2" width="18" height="18" aria-hidden="true"></i>
+              ¡Listo! Ya entendí el Segmento 1
+            </button>
+          </div>
+        </section>
+
+        <!-- SEGMENTO 2 -->
+        <section id="segmento-2" class="segment-section reveal-item no-print">
+          <div class="segment-header">
+            <div class="segment-title-wrap">
+              <span class="kicker">Segmento 2 de 6</span>
+              <h2 class="section-title">Saberes compartidos por generaciones</h2>
+            </div>
+            <span class="status-badge" id="badge-s2">Pendiente</span>
+          </div>
+
+          <div class="card" style="display: flex; flex-direction: column; gap: var(--space-md);">
+            <p>
+              ¿Cómo aprendieron estas recetas si antes no había libros en todas las casas? La medicina ancestral se ha transmitido de manera <strong>oral</strong> —es decir, hablando, escuchando y practicando en familia— durante muchísimas generaciones. Por eso es un <strong>patrimonio cultural</strong> muy valioso.
+            </p>
+            <div class="oral-chain">
+              <div class="oral-step" style="background: var(--background);">
+                <span class="mono-label">Paso 1 · Abuelos y abuelas</span>
+                <strong>Observan la naturaleza</strong>
+                <span style="font-size: 0.94rem; color: var(--on-surface-variant);">Prueban con respeto hojas, raíces y flores de los diversos ecosistemas del país.</span>
+              </div>
+              <div class="oral-step" style="background: var(--background);">
+                <span class="mono-label">Paso 2 · Madres y padres</span>
+                <strong>Guardan las recetas</strong>
+                <span style="font-size: 0.94rem; color: var(--on-surface-variant);">Preparan agüitas e infusiones en casa cuando alguien tiene un malestar leve.</span>
+              </div>
+              <div class="oral-step" style="background: var(--background);">
+                <span class="mono-label">Paso 3 · Niñas y niños de hoy</span>
+                <strong>Valoran y cuidan el saber</strong>
+                <span style="font-size: 0.94rem; color: var(--on-surface-variant);">Aprenden estos conocimientos que también inspiran a crear nuevos medicamentos.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="split-asymmetric">
+            <div class="card" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <div>
+                <span class="mono-label">Datos del pueblo montuvio</span>
+                <h3 class="card-title" style="margin-top: var(--space-xs);">¿Cuánto confían en la medicina tradicional?</h3>
+              </div>
+              <div class="stat-bars">
+                <div class="stat-row">
+                  <div class="stat-head">
+                    <span>Cree en la curación con medicina tradicional</span>
+                    <span class="stat-figure">92 %</span>
+                  </div>
+                  <div class="bar-bg"><div class="bar-val c1" style="width: 92%;"></div></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-head">
+                    <span>Se desparasita de forma natural</span>
+                    <span class="stat-figure is-ochre">55 %</span>
+                  </div>
+                  <div class="bar-bg"><div class="bar-val c2" style="width: 55%;"></div></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-head">
+                    <span>Considera al curandero un referente comunitario</span>
+                    <span class="stat-figure is-clay">41 %</span>
+                  </div>
+                  <div class="bar-bg"><div class="bar-val c3" style="width: 41%;"></div></div>
+                </div>
+              </div>
+              <span class="mono-label">Fuente: Cuaderno de Cultura y Saberes Montubios (2010), pág. 104</span>
+            </div>
+
+            <div class="card is-ochre-tint" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <span class="mono-label" style="color: var(--on-tertiary-container);">Para pensar en casa</span>
+              <h3 class="card-title" style="color: var(--on-tertiary-container);">¿Qué tan efectivos son los remedios caseros?</h3>
+              <p style="font-size: 0.97rem; color: var(--on-tertiary-container);">
+                En el campo muchas personas prefieren atender malestares suaves con remedios caseros (como una agüita para el dolor de barriga o el “espanto”).
+              </p>
+              <p style="font-size: 0.97rem; color: var(--on-tertiary-container);">
+                <strong>Recuerda:</strong> las plantas ayudan mucho y los científicos las estudian para hacer medicinas modernas, pero si una enfermedad es grave o hay una emergencia, <strong>siempre hay que acudir al médico</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="complete-btn-2" onclick="completeSegment(2)">
+              <i data-lucide="check-circle-2" width="18" height="18" aria-hidden="true"></i>
+              ¡Listo! Ya entendí el Segmento 2
+            </button>
+          </div>
+        </section>
+
+        <!-- SEGMENTO 3 -->
+        <section id="segmento-3" class="segment-section reveal-item no-print">
+          <div class="segment-header">
+            <div class="segment-title-wrap">
+              <span class="kicker">Segmento 3 de 6</span>
+              <h2 class="section-title">Tres plantas curativas estrella: Zaragoza, Altamisa y Valeriana</h2>
+            </div>
+            <span class="status-badge" id="badge-s3">Pendiente</span>
+          </div>
+
+          <p>
+            Toca los botones dentro de cada tarjeta para descubrir cómo es cada planta, cómo se prepara según tu libro de Ciencias Naturales 7 y qué malestar ayuda a aliviar.
+          </p>
+
+          <div class="card-grid">
+            <!-- ZARAGOZA -->
+            <article class="plant-card">
+              <div>
+                <span class="mono-label">Planta 1 · Costa y manglar</span>
+                <h3 class="card-title">Zaragoza</h3>
+                <span class="scientific-name">Conocarpus erectus</span>
+              </div>
+              <div class="plant-illus">
+                <svg viewBox="0 0 160 120" role="img" aria-label="Ilustración de rama de Zaragoza o mangle">
+                  <path d="M28 98 C64 82, 94 60, 134 26" stroke="var(--tertiary)" stroke-width="4" stroke-linecap="round" fill="none"/>
+                  <path d="M56 84 C44 64, 48 44, 64 36 C74 52, 72 72, 56 84 Z" fill="var(--primary)"/>
+                  <path d="M84 68 C78 44, 88 26, 108 22 C110 42, 100 60, 84 68 Z" fill="var(--data-1)"/>
+                  <path d="M92 66 C114 68, 132 82, 136 98 C114 98, 98 86, 92 66 Z" fill="var(--primary)"/>
+                  <circle cx="132" cy="28" r="8" fill="var(--tertiary)"/>
+                  <circle cx="118" cy="40" r="6" fill="var(--tertiary-container)"/>
+                </svg>
+              </div>
+              <div class="plant-tabs">
+                <button type="button" class="plant-tab is-selected" id="tab-zaragoza-que" onclick="showPlantTab('zaragoza', 'que')">¿Qué alivia?</button>
+                <button type="button" class="plant-tab" id="tab-zaragoza-prep" onclick="showPlantTab('zaragoza', 'prep')">Preparación</button>
+              </div>
+              <div class="plant-detail-box" id="detail-zaragoza">
+                <strong>Mordedura de serpiente (auxilio inicial):</strong> En la tradición montuvia se prepara un auxilio rápido mientras se traslada de inmediato a la persona herida hacia un centro médico.
+              </div>
+              <div class="safety-note">
+                <i data-lucide="shield-alert" width="18" height="18" aria-hidden="true" style="flex-shrink:0; margin-top:2px;"></i>
+                <span>Solo adultos deben prepararlo; ante una mordedura siempre se debe ir urgente al doctor.</span>
+              </div>
+            </article>
+
+            <!-- ALTAMISA -->
+            <article class="plant-card">
+              <div>
+                <span class="mono-label">Planta 2 · Hojas aromáticas</span>
+                <h3 class="card-title">Altamisa</h3>
+                <span class="scientific-name">Ambrosia artemisifolia</span>
+              </div>
+              <div class="plant-illus">
+                <svg viewBox="0 0 160 120" role="img" aria-label="Ilustración de cogollos de Altamisa">
+                  <path d="M80 108 L80 28" stroke="var(--primary)" stroke-width="4" stroke-linecap="round"/>
+                  <!-- Hojas recortadas -->
+                  <path d="M80 86 C56 84, 42 74, 36 62 C52 62, 66 70, 80 86 Z" fill="var(--primary)"/>
+                  <path d="M80 86 C104 84, 118 74, 124 62 C108 62, 94 70, 80 86 Z" fill="var(--primary)"/>
+                  <path d="M80 64 C58 60, 48 48, 46 36 C60 40, 72 50, 80 64 Z" fill="var(--data-1)"/>
+                  <path d="M80 64 C102 60, 112 48, 114 36 C100 40, 88 50, 80 64 Z" fill="var(--data-1)"/>
+                  <!-- Cogollos superiores -->
+                  <circle cx="80" cy="24" r="7" fill="var(--tertiary-container)"/>
+                  <circle cx="68" cy="30" r="5" fill="var(--tertiary)"/>
+                  <circle cx="92" cy="30" r="5" fill="var(--tertiary)"/>
+                </svg>
+              </div>
+              <div class="plant-tabs">
+                <button type="button" class="plant-tab is-selected" id="tab-altamisa-que" onclick="showPlantTab('altamisa', 'que')">¿Qué alivia?</button>
+                <button type="button" class="plant-tab" id="tab-altamisa-prep" onclick="showPlantTab('altamisa', 'prep')">Preparación</button>
+              </div>
+              <div class="plant-detail-box" id="detail-altamisa">
+                <strong>Cólico menstrual:</strong> Ayuda a calmar el dolor de barriga y los cólicos gracias al calor de la infusión y a las propiedades naturales de sus hojas tiernas.
+              </div>
+              <div class="safety-note" style="background: var(--primary-container); color: var(--on-primary-container);">
+                <i data-lucide="leaf" width="18" height="18" aria-hidden="true" style="flex-shrink:0; margin-top:2px;"></i>
+                <span>Se usan sus cogollos (brotes tiernos) hervidos en agua con ayuda de un adulto.</span>
+              </div>
+            </article>
+
+            <!-- VALERIANA -->
+            <article class="plant-card">
+              <div>
+                <span class="mono-label">Planta 3 · Flores rosadas</span>
+                <h3 class="card-title">Valeriana</h3>
+                <span class="scientific-name">Valeriana officinalis</span>
+              </div>
+              <div class="plant-illus">
+                <svg viewBox="0 0 160 120" role="img" aria-label="Ilustración de Valeriana con raíz gruesa y flores rosadas">
+                  <!-- Raíz gruesa -->
+                  <path d="M80 90 C74 102, 64 110, 56 112 M80 90 C80 104, 80 112, 80 115 M80 90 C88 102, 98 108, 106 110" stroke="var(--tertiary)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                  <!-- Tallo hueco -->
+                  <path d="M80 90 L80 34" stroke="var(--primary)" stroke-width="4.5" stroke-linecap="round"/>
+                  <path d="M80 72 C62 68, 52 58, 50 48 C64 50, 74 58, 80 72 Z" fill="var(--primary)"/>
+                  <path d="M80 68 C98 64, 108 54, 110 44 C96 46, 86 54, 80 68 Z" fill="var(--primary)"/>
+                  <!-- Ramillete de flores rosadas / terracota suave -->
+                  <circle cx="80" cy="24" r="9" fill="var(--data-3)" opacity="0.85"/>
+                  <circle cx="66" cy="30" r="7" fill="var(--data-3)" opacity="0.72"/>
+                  <circle cx="94" cy="30" r="7" fill="var(--data-3)" opacity="0.72"/>
+                  <circle cx="74" cy="16" r="6" fill="var(--tertiary-container)"/>
+                  <circle cx="88" cy="18" r="6" fill="var(--tertiary-container)"/>
+                </svg>
+              </div>
+              <div class="plant-tabs">
+                <button type="button" class="plant-tab is-selected" id="tab-valeriana-que" onclick="showPlantTab('valeriana', 'que')">¿Qué alivia?</button>
+                <button type="button" class="plant-tab" id="tab-valeriana-prep" onclick="showPlantTab('valeriana', 'prep')">¿Cómo es?</button>
+              </div>
+              <div class="plant-detail-box" id="detail-valeriana">
+                <strong>Equilibrio nervioso:</strong> Actúa como <strong>sedante y calmante</strong> natural en casos de nerviosismo, histerismo, palpitaciones rápidas o malestar del corazón.
+              </div>
+              <div class="safety-note" style="background: var(--primary-container); color: var(--on-primary-container);">
+                <i data-lucide="heart-handshake" width="18" height="18" aria-hidden="true" style="flex-shrink:0; margin-top:2px;"></i>
+                <span>Mide hasta 1 metro de altura y sus flores rosadas tienen un aroma muy agradable.</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="complete-btn-3" onclick="completeSegment(3)">
+              <i data-lucide="check-circle-2" width="18" height="18" aria-hidden="true"></i>
+              ¡Listo! Ya conozco estas 3 plantas
+            </button>
+          </div>
+        </section>
+
+        <!-- SEGMENTO 4 -->
+        <section id="segmento-4" class="segment-section reveal-item no-print">
+          <div class="segment-header">
+            <div class="segment-title-wrap">
+              <span class="kicker">Segmento 4 de 6</span>
+              <h2 class="section-title">Explorador del Herbario Montuvio</h2>
+            </div>
+            <span class="status-badge" id="badge-s4">Pendiente</span>
+          </div>
+
+          <p>
+            En las páginas 102 a 104 de tu libro aparecen otras plantas curativas muy conocidas en el campo ecuatoriano. Toca un grupo de malestar para ver qué planta se usa:
+          </p>
+
+          <div class="filter-pills" role="group" aria-label="Filtrar plantas por tipo de malestar">
+            <button type="button" class="filter-pill is-active" id="filter-todos" onclick="filterHerbario('todos')">Todas (8)</button>
+            <button type="button" class="filter-pill" id="filter-barriga" onclick="filterHerbario('barriga')">Barriga y parásitos</button>
+            <button type="button" class="filter-pill" id="filter-garganta" onclick="filterHerbario('garganta')">Garganta y encías</button>
+            <button type="button" class="filter-pill" id="filter-sangre" onclick="filterHerbario('sangre')">Presión y colesterol</button>
+            <button type="button" class="filter-pill" id="filter-huesos" onclick="filterHerbario('huesos')">Huesos</button>
+          </div>
+
+          <div class="herbario-grid" id="herbario-grid">
+            <!-- Populated by JS from textbook data -->
+          </div>
+
+          <div class="callout-box">
+            <span class="mono-label">Actividad autónoma sobre el Paico (adaptada de pág. 104)</span>
+            <p style="font-size: 0.96rem;">
+              En el libro se propone conocer el <strong>paico</strong> (<em>Chenopodium ambrosioides</em>). Como estás estudiando de forma individual desde casa, observa sus tres usos principales: combate <strong>lombrices y parásitos</strong>, alivia <strong>cólicos e indigestiones</strong> y ayuda a <strong>estimular la memoria</strong>.
+            </p>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="complete-btn-4" onclick="completeSegment(4)">
+              <i data-lucide="check-circle-2" width="18" height="18" aria-hidden="true"></i>
+              ¡Listo! Ya exploré el herbario
+            </button>
+          </div>
+        </section>
+
+        <!-- SEGMENTO 5: QUEST INTERACTIVO -->
+        <section id="segmento-5" class="segment-section reveal-item no-print">
+          <div class="segment-header">
+            <div class="segment-title-wrap">
+              <span class="kicker">Segmento 5 de 6</span>
+              <h2 class="section-title">Quest Interactivo: ¡Demuestra lo que aprendiste!</h2>
+            </div>
+            <span class="status-badge is-ochre" id="badge-s5">Puntaje: 0 / 6</span>
+          </div>
+
+          <div class="quest-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <p>
+                Responde las <strong>6 preguntas</strong> tocando la respuesta correcta. Necesitas al menos <strong>4 aciertos</strong> para desbloquear tu Certificado de Aprobación. ¡Si fallas una, puedes volver a intentarlo!
+              </p>
+              <button type="button" class="btn btn-secondary" id="reset-quest-btn" onclick="resetQuest(this)">
+                <i data-lucide="rotate-ccw" width="16" height="16" aria-hidden="true"></i>
+                Reiniciar Quest
+              </button>
+            </div>
+
+            <div id="quest-questions-container" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <!-- Questions rendered by JS -->
+            </div>
+
+            <div class="callout-box" id="quest-result-banner" style="background: var(--background);">
+              <strong id="quest-result-title">Tu resultado aparecerá aquí</strong>
+              <span id="quest-result-desc">Responde todas las preguntas para desbloquear el Segmento 6 (Certificado).</span>
+              <div class="btn-row" id="quest-unlock-cta" style="display: none; margin-top: var(--space-xs);">
+                <button type="button" class="btn btn-primary" onclick="jumpToSegment('segmento-6')">
+                  <i data-lucide="award" width="18" height="18" aria-hidden="true"></i>
+                  Ir a crear mi Certificado
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SEGMENTO 6: CERTIFICADO PERSONALIZADO -->
+        <section id="segmento-6" class="segment-section reveal-item">
+          <div class="segment-header no-print">
+            <div class="segment-title-wrap">
+              <span class="kicker">Segmento 6 de 6</span>
+              <h2 class="section-title">Tu Certificado de Aprobación</h2>
+            </div>
+            <span class="status-badge" id="badge-s6">Bloqueado hasta aprobar el Quest</span>
+          </div>
+
+          <!-- Estado bloqueado -->
+          <div class="card no-print" id="cert-locked-box" style="display: flex; flex-direction: column; gap: var(--space-md);">
+            <p>
+              <strong>¡Ya casi llegas!</strong> Completa primero el <strong>Quest Interactivo (Segmento 5)</strong> con al menos <strong>4 de 6 respuestas correctas</strong> para activar tu certificado personalizado con tu nombre completo.
+            </p>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary" onclick="jumpToSegment('segmento-5')">
+                <i data-lucide="arrow-up" width="18" height="18" aria-hidden="true"></i>
+                Ir al Quest Interactivo
+              </button>
+            </div>
+          </div>
+
+          <!-- Estado desbloqueado -->
+          <div class="cert-panel" id="cert-unlocked-box" style="display: none;">
+            <div class="no-print" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <p>
+                <strong>¡Felicitaciones por aprobar!</strong> Escribe tu nombre completo exactamente como quieres que aparezca en tu certificado, míralo en pantalla y descárgalo en formato <strong>JPG</strong> o imprímelo.
+              </p>
+              <div class="form-row">
+                <div class="input-group">
+                  <label class="input-label" for="student-name-input">Nombre completo del estudiante:</label>
+                  <input
+                    type="text"
+                    id="student-name-input"
+                    class="text-input"
+                    maxlength="60"
+                    placeholder="Ejemplo: Mateo Alejandro Paredes Vera"
+                    oninput="handleStudentNameInput(this.value)"
+                  >
+                </div>
+                <button type="button" class="btn btn-primary" onclick="generateCertificateAction()">
+                  <i data-lucide="sparkles" width="18" height="18" aria-hidden="true"></i>
+                  Actualizar certificado
+                </button>
+              </div>
+              <div class="inline-msg" id="cert-status-msg" aria-live="polite"></div>
+            </div>
+
+            <div class="cert-canvas-wrap">
+              <canvas id="certificate-canvas" width="1200" height="850" aria-label="Vista previa del certificado de aprobación"></canvas>
+              <img id="certificate-img-preview" alt="Certificado de aprobación en formato JPG listo para guardar en tu teléfono">
+            </div>
+
+            <div class="btn-row no-print">
+              <button type="button" class="btn btn-primary" id="btn-download-jpg" onclick="downloadCertificateJPG()">
+                <i data-lucide="download" width="18" height="18" aria-hidden="true"></i>
+                Descargar Certificado (JPG)
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="printCertificate()">
+                <i data-lucide="printer" width="18" height="18" aria-hidden="true"></i>
+                Imprimir Certificado
+              </button>
+            </div>
+            <p class="no-print" style="font-size: 0.9rem; color: var(--on-surface-variant);">
+              Consejo para celular: al presionar <strong>Descargar Certificado (JPG)</strong> se guardará la imagen en tus descargas. Si tu navegador abre la imagen en pantalla, también puedes mantener presionado sobre el certificado y elegir <em>Guardar imagen</em>.
+            </p>
+          </div>
+        </section>
+
+        <!-- TAREA PARA EL HOGAR (ÚNICA TARJETA PALE-LEAF DE TODA LA PÁGINA) -->
+        <section id="tarea-hogar" class="segment-section reveal-item no-print">
+          <div class="card is-leaf-highlight" style="display: flex; flex-direction: column; gap: var(--space-md);">
+            <span class="kicker" style="color: var(--on-primary-container);">
+              <i data-lucide="notebook-pen" width="16" height="16" aria-hidden="true"></i>
+              Tarea individual para el hogar
+            </span>
+            <h2 class="section-title">Actividad para tu cuaderno de materia/copia</h2>
+            <p style="font-size: 1.15rem; font-weight: 700;">
+              “Realizar en el cuaderno de materia/copia un trabajo sobre una medicina tradicional preparada a partir de una planta medicinal y explicar detalladamente su beneficio.”
+            </p>
+            <div style="background: var(--background); color: var(--on-surface); border-radius: var(--rounded); padding: var(--space-md);">
+              <strong style="display: block; margin-bottom: var(--space-xs); color: var(--on-surface);">Guía fácil para hacer tu tarea en 4 pasos:</strong>
+              <ol style="color: var(--on-surface);">
+                <li><strong>Elige una planta medicinal</strong> que hayas aprendido hoy (por ejemplo: altamisa, valeriana, paico, guayaba o sábila) o una que conozcan en tu familia.</li>
+                <li><strong>Dibuja y colorea la planta</strong> con mucho cuidado en tu cuaderno.</li>
+                <li><strong>Escribe cómo se prepara</strong> la medicina tradicional (qué parte de la planta se usa y cómo se hace la infusión o remedio, siempre con supervisión de un adulto).</li>
+                <li><strong>Explica detalladamente su beneficio:</strong> para qué malestar sirve, cómo ayuda al cuerpo y por qué es importante cuidar estos saberes ancestrales.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- FOOTER / FUENTE -->
+    <footer class="page-footer no-print">
+      <strong>Fuente del contenido educativo:</strong>
+      <span>Libro de texto <em>Ciencias Naturales 7</em>, páginas 102 a 104 (“Conocimientos ancestrales de la medicina montuvia”), Ministerio de Educación del Ecuador; y datos del <em>Cuaderno de Cultura y Saberes Montubios</em> (2010) citados en el texto.</span>
+      <span>Recurso diseñado para aprendizaje autónomo y asincrónico · Séptimo año A · Ing. Jury Navas, Mg. · 26 de noviembre de 2026.</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    // --- DATA (Backticks used for safe apostrophes and quotes) ---
+    const PROVINCE_DATA = {
+      manabi: {
+        title: `Manabí`,
+        desc: `En los campos y colinas de Manabí, las familias montuvias cultivan y cuidan plantas curativas que pasan de abuelos a nietos.`
+      },
+      losrios: {
+        title: `Los Ríos`,
+        desc: `Rodeada de ríos fértiles, en Los Ríos crecen hierbas medicinales como el paico, la altamisa y árboles frutales curativos como la guayaba.`
+      },
+      guayas: {
+        title: `Guayas`,
+        desc: `En las zonas rurales y manglares del Guayas se encuentra el mangle de Zaragoza y orquídeas epífitas como la suelda consuelda.`
+      },
+      eloro: {
+        title: `El Oro`,
+        desc: `En El Oro, la medicina tradicional convive con el cuidado diario del hogar, usando infusiones de plantas locales para aliviar malestares comunes.`
+      }
+    };
+
+    const PLANT_DETAILS = {
+      zaragoza: {
+        que: `<strong>Mordedura de serpiente (auxilio inicial):</strong> En la tradición montuvia se prepara un auxilio rápido llamado <em>“gloriado”</em> mientras se traslada de inmediato a la persona herida hacia un médico.`,
+        prep: `<strong>¿Cómo se prepara? (pág. 102):</strong> Un adulto hierve un trocito de mangle de Zaragoza, un trozo de jengibre y medio vaso de aguardiente; se toma un vaso del gloriado únicamente camino al hospital.`
+      },
+      altamisa: {
+        que: `<strong>Cólico menstrual:</strong> Ayuda a calmar el dolor de barriga y los cólicos gracias al calor de la infusión y a las propiedades naturales de sus cogollos.`,
+        prep: `<strong>¿Cómo se prepara? (pág. 102):</strong> Se unen cinco cogollos (brotes tiernos) de altamisa y se hierven en una taza de agua. Se toma tibio.`
+      },
+      valeriana: {
+        que: `<strong>Equilibrio nervioso:</strong> Actúa como <strong>sedante y calmante</strong> natural en casos de nerviosismo, histerismo, palpitaciones rápidas o malestar del corazón.`,
+        prep: `<strong>¿Cómo es esta planta? (pág. 104):</strong> Tiene raíz gruesa, tallo anguloso y hueco, flores rosadas muy perfumadas y alcanza hasta un metro de altura.`
+      }
+    };
+
+    const HERBARIO_ITEMS = [
+      {
+        name: `Paico`,
+        sci: `Chenopodium ambrosioides`,
+        cat: `barriga`,
+        malestar: `Lombrices, parásitos, cólicos y diarreas`,
+        uso: `Combate parásitos intestinales, llenura e indigestiones; además estimula la memoria.`
+      },
+      {
+        name: `Guayaba`,
+        sci: `Psidium guajava`,
+        cat: `garganta`,
+        malestar: `Diarreas e inflamación de encías`,
+        uso: `Se usa tradicionalmente para calmar las diarreas y desinflamar las encías.`
+      },
+      {
+        name: `Hoja del aire`,
+        sci: `Kalanchoe pinnata`,
+        cat: `garganta`,
+        malestar: `Amigdalitis (dolor de garganta)`,
+        uso: `Se mastican las hojas de esta planta tres o cuatro veces al día para aliviar las amígdalas.`
+      },
+      {
+        name: `Higuerón`,
+        sci: `Ficus spp.`,
+        cat: `barriga`,
+        malestar: `Lombrices parásitas (Ascaris lumbricoides)`,
+        uso: `Se toman dos cucharadas de leche de higuerón en ayunas y se realizan baños para refrescarse.`
+      },
+      {
+        name: `Apio`,
+        sci: `Apium graveolens`,
+        cat: `sangre`,
+        malestar: `Presión alta`,
+        uso: `Picar seis tallos de apio blanco en trocitos, encurtirlos con limón y comer tres veces al día.`
+      },
+      {
+        name: `Pimiento`,
+        sci: `Capsicum`,
+        cat: `sangre`,
+        malestar: `Colesterol alto`,
+        uso: `Tomar el zumo de pimiento en ayunas por tres días consecutivos.`
+      },
+      {
+        name: `Tamarindo, sen, malva blanca y sábila`,
+        sci: `Tamarindus indica, Cassia angustifolia, Aloe vera`,
+        cat: `barriga`,
+        malestar: `Estreñimiento, limpieza y gastritis`,
+        uso: `Jugo de tamarindo con infusión de sen en ayunas, flores de malva blanca y licuado del cristal de sábila.`
+      },
+      {
+        name: `Suelda consuelda`,
+        sci: `Catasetum macroglossum`,
+        cat: `huesos`,
+        malestar: `Fracturas óseas`,
+        uso: `Orquídea epífita que crece sobre los árboles de mangle y se utiliza para ayudar en fracturas de los huesos.`
+      }
+    ];
+
+    const QUEST_QUESTIONS = [
+      {
+        id: 0,
+        prompt: `1. ¿En qué provincias de la Costa ecuatoriana viven principalmente los montuvios?`,
+        options: [
+          `El Oro, Guayas, Los Ríos y Manabí`,
+          `Carchi, Imbabura, Pichincha y Loja`,
+          `Napo, Pastaza, Morona y Zamora`
+        ],
+        correct: 0,
+        explain: `¡Correcto! Según el libro (pág. 102), los montuvios habitan las zonas rurales costaneras de El Oro, Guayas, Los Ríos y Manabí.`
+      },
+      {
+        id: 1,
+        prompt: `2. ¿Cómo se ha transmitido la medicina ancestral montuvia a través del tiempo?`,
+        options: [
+          `Únicamente por programas de televisión`,
+          `De manera oral, de abuelos a padres y de padres a hijos`,
+          `Por mensajes de correo electrónico antiguos`
+        ],
+        correct: 1,
+        explain: `¡Muy bien! Estos conocimientos han viajado de forma oral por muchas generaciones como un tesoro cultural.`
+      },
+      {
+        id: 2,
+        prompt: `3. ¿Qué planta del manglar se usa en el “gloriado” como auxilio ante mordedura de serpiente mientras se lleva al médico?`,
+        options: [
+          `Guayaba`,
+          `Apio blanco`,
+          `Zaragoza (mangle de Zaragoza)`
+        ],
+        correct: 2,
+        explain: `¡Exacto! Se hierve mangle de Zaragoza con jengibre y aguardiente mientras se traslada urgente al enfermo al médico.`
+      },
+      {
+        id: 3,
+        prompt: `4. ¿Para qué malestar se hierven cinco cogollos de Altamisa en una taza de agua?`,
+        options: [
+          `Para aliviar el cólico menstrual`,
+          `Para curar fracturas de huesos`,
+          `Para bajar el colesterol`
+        ],
+        correct: 0,
+        explain: `¡Acertaste! Cinco cogollos de altamisa hervidos en una taza de agua se usan para calmar el cólico menstrual.`
+      },
+      {
+        id: 4,
+        prompt: `5. ¿Cuál es la planta de flores rosadas perfumadas que actúa como sedante y calmante nervioso?`,
+        options: [
+          `Hoja del aire`,
+          `Valeriana`,
+          `Pimiento`
+        ],
+        correct: 1,
+        explain: `¡Genial! La Valeriana (Valeriana officinalis) calma los nervios, las palpitaciones y ayuda al equilibrio nervioso.`
+      },
+      {
+        id: 5,
+        prompt: `6. Según la página 104, ¿qué planta combate lombrices, cólicos y también estimula la memoria?`,
+        options: [
+          `Paico`,
+          `Suelda consuelda`,
+          `Tamarindo`
+        ],
+        correct: 0,
+        explain: `¡Excelente! El paico combate parásitos intestinales, cólicos e indigestiones y ayuda a estimular la memoria.`
+      }
+    ];
+
+    // --- STATE ---
+    let appState = {
+      completedSegments: [],
+      quizAnswers: {},
+      quizPassed: false,
+      quizScore: 0,
+      studentName: ``,
+      activeProvince: `manabi`,
+      activeFilter: `todos`
+    };
+
+    // --- PERSISTENCE HELPERS ---
+    async function saveState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        // Ignore gracefully in standalone static hosting
+      }
+    }
+
+    async function loadState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = {
+              completedSegments: Array.isArray(saved.completedSegments) ? saved.completedSegments : [],
+              quizAnswers: saved.quizAnswers && typeof saved.quizAnswers === 'object' ? saved.quizAnswers : {},
+              quizPassed: Boolean(saved.quizPassed),
+              quizScore: Number(saved.quizScore) || 0,
+              studentName: typeof saved.studentName === 'string' ? saved.studentName : ``,
+              activeProvince: typeof saved.activeProvince === 'string' ? saved.activeProvince : `manabi`,
+              activeFilter: typeof saved.activeFilter === 'string' ? saved.activeFilter : `todos`
+            };
+          }
+        }
+      } catch (err) {
+        // Ignore gracefully in standalone static hosting
+      }
+    }
+
+    // --- NAVIGATION & PROGRESS ---
+    function jumpToSegment(id) {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function completeSegment(num) {
+      if (!appState.completedSegments.includes(num)) {
+        appState.completedSegments.push(num);
+        appState.completedSegments.sort((a, b) => a - b);
+      }
+      updateProgressUI();
+      saveState();
+
+      if (num < 6) {
+        const nextId = `segmento-${num + 1}`;
+        const nextEl = document.getElementById(nextId);
+        if (nextEl) {
+          setTimeout(() => {
+            nextEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 180);
+        }
+      }
+    }
+
+    function updateProgressUI() {
+      const total = 6;
+      const doneCount = appState.completedSegments.length;
+      const pct = Math.round((doneCount / total) * 100);
+
+      const bar = document.getElementById('main-progress-bar');
+      const fill = document.getElementById('main-progress-fill');
+      const pctLabel = document.getElementById('progress-percent-label');
+      const summary = document.getElementById('progress-summary-text');
+
+      if (bar) bar.setAttribute('aria-valuenow', String(pct));
+      if (fill) fill.style.width = `${pct}%`;
+      if (pctLabel) pctLabel.textContent = `${pct} % completado`;
+
+      if (summary) {
+        if (doneCount === 0) {
+          summary.textContent = `0 de 6 segmentos completados · Empieza por el Segmento 1`;
+        } else if (doneCount < 6) {
+          summary.textContent = `${doneCount} de 6 segmentos completados · ¡Vas muy bien!`;
+        } else {
+          summary.textContent = `¡6 de 6 segmentos completados! Eres un experto en plantas curativas montuvias`;
+        }
+      }
+
+      // Find first incomplete segment for is-prep highlight
+      let nextPending = 1;
+      while (nextPending <= 6 && appState.completedSegments.includes(nextPending)) {
+        nextPending++;
+      }
+
+      for (let i = 1; i <= 6; i++) {
+        const cell = document.getElementById(`strip-s${i}`);
+        const badge = document.getElementById(`badge-s${i}`);
+        const btn = document.getElementById(`complete-btn-${i}`);
+        const isDone = appState.completedSegments.includes(i);
+
+        if (cell) {
+          cell.classList.remove('is-peak', 'is-prep');
+          if (isDone) {
+            cell.classList.add('is-peak');
+          } else if (i === nextPending) {
+            cell.classList.add('is-prep');
+          }
+        }
+
+        if (badge && i <= 4) {
+          if (isDone) {
+            badge.textContent = `Completado`;
+            badge.classList.add('is-done');
+          } else if (i === nextPending) {
+            badge.textContent = `En curso`;
+            badge.classList.remove('is-done');
+          } else {
+            badge.textContent = `Pendiente`;
+            badge.classList.remove('is-done');
+          }
+        }
+
+        if (btn) {
+          if (isDone) {
+            btn.textContent = `Segmento ${i} completado`;
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-ochre');
+          }
+        }
+      }
+    }
+
+    // --- SEGMENT 1: MAP INTERACTION ---
+    function selectProvince(key) {
+      const info = PROVINCE_DATA[key];
+      if (!info) return;
+      appState.activeProvince = key;
+
+      const keys = ['manabi', 'losrios', 'guayas', 'eloro'];
+      keys.forEach((k) => {
+        const shape = document.getElementById(`map-${k}`);
+        const btn = document.getElementById(`btn-prov-${k}`);
+        if (shape) {
+          shape.setAttribute('fill', k === key ? 'var(--primary)' : 'var(--tertiary-container)');
+        }
+        if (btn) {
+          if (k === key) btn.classList.add('is-active');
+          else btn.classList.remove('is-active');
+        }
+      });
+
+      const titleEl = document.getElementById('province-title');
+      const descEl = document.getElementById('province-desc');
+      if (titleEl) titleEl.textContent = info.title;
+      if (descEl) descEl.textContent = info.desc;
+
+      saveState();
+    }
+
+    // --- SEGMENT 3: PLANT TABS ---
+    function showPlantTab(plantKey, tabKey) {
+      const plant = PLANT_DETAILS[plantKey];
+      if (!plant || !plant[tabKey]) return;
+
+      const detailEl = document.getElementById(`detail-${plantKey}`);
+      if (detailEl) detailEl.innerHTML = plant[tabKey];
+
+      const tabs = ['que', 'prep'];
+      tabs.forEach((t) => {
+        const btn = document.getElementById(`tab-${plantKey}-${t}`);
+        if (btn) {
+          if (t === tabKey) btn.classList.add('is-selected');
+          else btn.classList.remove('is-selected');
+        }
+      });
+    }
+
+    // --- SEGMENT 4: HERBARIO FILTER ---
+    function filterHerbario(cat) {
+      appState.activeFilter = cat;
+      const cats = ['todos', 'barriga', 'garganta', 'sangre', 'huesos'];
+      cats.forEach((c) => {
+        const btn = document.getElementById(`filter-${c}`);
+        if (btn) {
+          if (c === cat) btn.classList.add('is-active');
+          else btn.classList.remove('is-active');
+        }
+      });
+
+      const grid = document.getElementById('herbario-grid');
+      if (!grid) return;
+
+      const filtered = cat === 'todos'
+        ? HERBARIO_ITEMS
+        : HERBARIO_ITEMS.filter((item) => item.cat === cat);
+
+      grid.innerHTML = filtered.map((item) => `
+        <article class="herbario-item">
+          <span class="mono-label">${item.malestar}</span>
+          <h3 class="card-title">${item.name}</h3>
+          <span class="scientific-name">${item.sci}</span>
+          <p style="font-size: 0.94rem; margin-top: var(--space-xs);">${item.uso}</p>
+        </article>
+      `).join('');
+
+      saveState();
+    }
+
+    // --- SEGMENT 5: QUEST INTERACTION ---
+    function renderQuest() {
+      const container = document.getElementById('quest-questions-container');
+      if (!container) return;
+
+      container.innerHTML = QUEST_QUESTIONS.map((q) => {
+        const chosen = appState.quizAnswers[q.id];
+        const hasAnswered = chosen !== undefined && chosen !== null;
+        const isRight = chosen === q.correct;
+
+        const optionsHtml = q.options.map((opt, idx) => {
+          let cls = 'option-btn';
+          if (hasAnswered && chosen === idx) {
+            cls += isRight ? ' is-correct' : ' is-wrong';
+          }
+          return `
+            <button
+              type="button"
+              class="${cls}"
+              onclick="answerQuest(${q.id}, ${idx})"
+              aria-pressed="${chosen === idx ? 'true' : 'false'}"
+            >
+              <span>${opt}</span>
+            </button>
+          `;
+        }).join('');
+
+        let fbHtml = '';
+        if (hasAnswered) {
+          if (isRight) {
+            fbHtml = `<div class="feedback-msg is-visible is-ok">${q.explain}</div>`;
+          } else {
+            fbHtml = `<div class="feedback-msg is-visible is-err">¡Casi! Revisa los segmentos anteriores y prueba otra opción.</div>`;
+          }
+        }
+
+        return `
+          <div class="question-card">
+            <strong style="font-size: 1.04rem;">${q.prompt}</strong>
+            <div class="options-list">${optionsHtml}</div>
+            ${fbHtml}
+          </div>
+        `;
+      }).join('');
+
+      evaluateQuest();
+    }
+
+    function answerQuest(qId, optIdx) {
+      appState.quizAnswers[qId] = optIdx;
+      renderQuest();
+      saveState();
+    }
+
+    function evaluateQuest() {
+      let score = 0;
+      let answeredCount = 0;
+      QUEST_QUESTIONS.forEach((q) => {
+        const ans = appState.quizAnswers[q.id];
+        if (ans !== undefined && ans !== null) {
+          answeredCount++;
+          if (ans === q.correct) score++;
+        }
+      });
+
+      appState.quizScore = score;
+      const passed = score >= 4;
+      appState.quizPassed = passed;
+
+      const badge = document.getElementById('badge-s5');
+      if (badge) {
+        badge.textContent = `Puntaje: ${score} / ${QUEST_QUESTIONS.length}`;
+        if (passed) {
+          badge.classList.remove('is-ochre');
+          badge.classList.add('is-done');
+        } else {
+          badge.classList.add('is-ochre');
+          badge.classList.remove('is-done');
+        }
+      }
+
+      const resTitle = document.getElementById('quest-result-title');
+      const resDesc = document.getElementById('quest-result-desc');
+      const ctaWrap = document.getElementById('quest-unlock-cta');
+
+      if (passed) {
+        if (!appState.completedSegments.includes(5)) {
+          appState.completedSegments.push(5);
+          appState.completedSegments.sort((a, b) => a - b);
+        }
+        if (resTitle) resTitle.textContent = `¡Felicitaciones! Aprobaste con ${score} de 6 aciertos.`;
+        if (resDesc) resDesc.textContent = `Ya puedes escribir tu nombre en el Segmento 6 para generar y descargar tu Certificado de Aprobación en JPG.`;
+        if (ctaWrap) ctaWrap.style.display = 'flex';
+      } else {
+        if (resTitle) {
+          resTitle.textContent = answeredCount === 0
+            ? `Tu resultado aparecerá aquí`
+            : `Llevas ${score} de 6 aciertos (necesitas 4 para aprobar)`;
+        }
+        if (resDesc) {
+          resDesc.textContent = answeredCount === 0
+            ? `Responde todas las preguntas para desbloquear el Segmento 6 (Certificado).`
+            : `Puedes tocar otra respuesta en las preguntas que fallaste para aprender y alcanzar los 4 aciertos.`;
+        }
+        if (ctaWrap) ctaWrap.style.display = 'none';
+      }
+
+      updateCertificateVisibility();
+      updateProgressUI();
+    }
+
+    function resetQuest(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `Toca otra vez para reiniciar`;
+        setTimeout(() => {
+          if (btn && btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.textContent = `Reiniciar Quest`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `Reiniciar Quest`;
+      appState.quizAnswers = {};
+      appState.quizPassed = false;
+      appState.quizScore = 0;
+      appState.completedSegments = appState.completedSegments.filter((s) => s !== 5 && s !== 6);
+      renderQuest();
+      saveState();
+    }
+
+    // --- SEGMENT 6: CERTIFICATE CANVAS & JPG EXPORT ---
+    function updateCertificateVisibility() {
+      const lockedBox = document.getElementById('cert-locked-box');
+      const unlockedBox = document.getElementById('cert-unlocked-box');
+      const badge = document.getElementById('badge-s6');
+
+      if (appState.quizPassed) {
+        if (lockedBox) lockedBox.style.display = 'none';
+        if (unlockedBox) unlockedBox.style.display = 'flex';
+        if (badge) {
+          badge.textContent = appState.completedSegments.includes(6) ? `Certificado listo` : `Desbloqueado`;
+          badge.classList.add('is-done');
+        }
+        const nameInput = document.getElementById('student-name-input');
+        if (nameInput && nameInput.value !== appState.studentName) {
+          nameInput.value = appState.studentName;
+        }
+        drawCertificateCanvas();
+      } else {
+        if (lockedBox) lockedBox.style.display = 'flex';
+        if (unlockedBox) unlockedBox.style.display = 'none';
+        if (badge) {
+          badge.textContent = `Bloqueado hasta aprobar el Quest`;
+          badge.classList.remove('is-done');
+        }
+      }
+    }
+
+    function handleStudentNameInput(val) {
+      appState.studentName = val;
+      drawCertificateCanvas();
+      saveState();
+    }
+
+    function generateCertificateAction() {
+      const input = document.getElementById('student-name-input');
+      const msg = document.getElementById('cert-status-msg');
+      const name = input ? input.value.trim() : '';
+
+      if (name.length < 3) {
+        if (msg) {
+          msg.textContent = `Por favor escribe tu nombre completo (al menos 3 letras) antes de generar tu certificado.`;
+          msg.className = `inline-msg is-error`;
+        }
+        if (input) input.focus();
+        return;
+      }
+
+      appState.studentName = name;
+      if (!appState.completedSegments.includes(6)) {
+        appState.completedSegments.push(6);
+        appState.completedSegments.sort((a, b) => a - b);
+      }
+      drawCertificateCanvas();
+      updateProgressUI();
+      updateCertificateVisibility();
+      saveState();
+
+      if (msg) {
+        msg.textContent = `¡Certificado actualizado para ${name}! Ya puedes descargarlo en JPG o imprimirlo.`;
+        msg.className = `inline-msg is-success`;
+      }
+    }
+
+    function drawWrappedCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      let currentY = y;
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && i > 0) {
+          ctx.fillText(line.trim(), x, currentY);
+          line = words[i] + ' ';
+          currentY += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line.trim(), x, currentY);
+      return currentY;
+    }
+
+    function drawCertificateCanvas() {
+      const canvas = document.getElementById('certificate-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const styles = getComputedStyle(document.documentElement);
+      const colBg = styles.getPropertyValue('--background').trim() || '#faf6ef';
+      const colLoam = styles.getPropertyValue('--surface-container-low').trim() || '#f0eae0';
+      const colInk = styles.getPropertyValue('--on-surface').trim() || '#2a302b';
+      const colMuted = styles.getPropertyValue('--on-surface-variant').trim() || '#4a524b';
+      const colPrimary = styles.getPropertyValue('--primary').trim() || '#366948';
+      const colLeaf = styles.getPropertyValue('--primary-container').trim() || '#d8efe0';
+      const colOchre = styles.getPropertyValue('--tertiary').trim() || '#8f5822';
+      const colSeed = styles.getPropertyValue('--tertiary-container').trim() || '#f2d4a7';
+
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Fondo cálido papel almanaque
+      ctx.fillStyle = colBg;
+      ctx.fillRect(0, 0, w, h);
+
+      // Marco interior suave
+      ctx.fillStyle = colLoam;
+      ctx.fillRect(36, 36, w - 72, h - 72);
+
+      // Doble borde botánico
+      ctx.strokeStyle = colPrimary;
+      ctx.lineWidth = 8;
+      ctx.strokeRect(48, 48, w - 96, h - 96);
+
+      ctx.strokeStyle = colOchre;
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(64, 64, w - 128, h - 128);
+
+      // Hojas decorativas en las esquinas superiores
+      function drawCornerLeaf(cx, cy, flipX) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(flipX, 1);
+        ctx.fillStyle = colPrimary;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(38, -22, 74, 8);
+        ctx.quadraticCurveTo(34, 34, 0, 0);
+        ctx.fill();
+        ctx.fillStyle = colSeed;
+        ctx.beginPath();
+        ctx.arc(84, 14, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      drawCornerLeaf(88, 98, 1);
+      drawCornerLeaf(w - 88, 98, -1);
+
+      // Cinta superior
+      ctx.textAlign = 'center';
+      ctx.fillStyle = colOchre;
+      ctx.font = '700 20px "Nunito Sans", sans-serif';
+      ctx.fillText('CIENCIAS NATURALES · APRENDIZAJE AUTÓNOMO EN CASA', w / 2, 130);
+
+      // Título principal
+      ctx.fillStyle = colPrimary;
+      ctx.font = '700 58px "Literata", Georgia, serif';
+      ctx.fillText('CERTIFICADO DE APROBACIÓN', w / 2, 200);
+
+      // Subtítulo
+      ctx.fillStyle = colMuted;
+      ctx.font = '600 23px "Nunito Sans", sans-serif';
+      ctx.fillText('Se otorga con alegría el presente reconocimiento a:', w / 2, 265);
+
+      // Caja suave para el nombre del estudiante
+      const displayName = (appState.studentName && appState.studentName.trim().length > 0)
+        ? appState.studentName.trim()
+        : 'Escribe aquí tu nombre completo';
+
+      ctx.fillStyle = colLeaf;
+      ctx.fillRect(150, 294, w - 300, 92);
+      ctx.strokeStyle = colPrimary;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(150, 294, w - 300, 92);
+
+      ctx.fillStyle = colInk;
+      ctx.font = '700 40px "Literata", Georgia, serif';
+      ctx.fillText(displayName, w / 2, 354, w - 340);
+
+      // Descripción del logro
+      ctx.fillStyle = colInk;
+      ctx.font = '600 24px "Nunito Sans", sans-serif';
+      drawWrappedCanvasText(
+        ctx,
+        'Por haber completado exitosamente los 6 segmentos de estudio y aprobado el Quest de la clase:',
+        w / 2,
+        438,
+        w - 220,
+        34
+      );
+
+      // Nombre de la clase
+      ctx.fillStyle = colPrimary;
+      ctx.font = '700 28px "Literata", Georgia, serif';
+      drawWrappedCanvasText(
+        ctx,
+        '“Medicina Tradicional Montuvia y el Poder de las Plantas Curativas”',
+        w / 2,
+        522,
+        w - 200,
+        36
+      );
+
+      // Sello de aprobación dorado-canopy
+      ctx.save();
+      ctx.translate(w / 2, 634);
+      ctx.fillStyle = colSeed;
+      ctx.beginPath();
+      ctx.arc(0, 0, 48, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = colOchre;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      ctx.fillStyle = colOchre;
+      ctx.font = '700 22px "Geist Mono", monospace';
+      ctx.fillText(`${appState.quizScore}/6`, 0, -2);
+      ctx.font = '700 13px "Nunito Sans", sans-serif';
+      ctx.fillText('APROBADO', 0, 20);
+      ctx.restore();
+
+      // Pie institucional (dos columnas + referencia central)
+      ctx.strokeStyle = colOchre;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(120, 725);
+      ctx.lineTo(440, 725);
+      ctx.moveTo(w - 440, 725);
+      ctx.lineTo(w - 120, 725);
+      ctx.stroke();
+
+      ctx.fillStyle = colInk;
+      ctx.font = '700 20px "Nunito Sans", sans-serif';
+      ctx.fillText('Ing. Jury Navas, Mg.', 280, 752);
+      ctx.fillText('Séptimo año A', w - 280, 752);
+
+      ctx.fillStyle = colMuted;
+      ctx.font = '600 17px "Nunito Sans", sans-serif';
+      ctx.fillText('Docente de Ciencias Naturales', 280, 778);
+      ctx.fillText('26 de noviembre de 2026', w - 280, 778);
+
+      ctx.fillStyle = colMuted;
+      ctx.font = '500 15px "Geist Mono", monospace';
+      ctx.fillText('Libro de Ciencias Naturales 7 · Páginas 102 a 104', w / 2, 795);
+
+      // Actualizar vista JPG auxiliar para teléfonos (long-press / compartir)
+      const imgPreview = document.getElementById('certificate-img-preview');
+      if (imgPreview) {
+        try {
+          const jpgUrl = canvas.toDataURL('image/jpeg', 0.94);
+          imgPreview.src = jpgUrl;
+          imgPreview.style.display = 'block';
+          canvas.style.display = 'none';
+        } catch (err) {
+          imgPreview.style.display = 'none';
+          canvas.style.display = 'block';
+        }
+      }
+    }
+
+    function downloadCertificateJPG() {
+      const input = document.getElementById('student-name-input');
+      const msg = document.getElementById('cert-status-msg');
+      const canvas = document.getElementById('certificate-canvas');
+      const name = input ? input.value.trim() : '';
+
+      if (name.length < 3) {
+        if (msg) {
+          msg.textContent = `Escribe primero tu nombre completo para descargar tu certificado en JPG.`;
+          msg.className = `inline-msg is-error`;
+        }
+        if (input) input.focus();
+        return;
+      }
+
+      appState.studentName = name;
+      if (!appState.completedSegments.includes(6)) {
+        appState.completedSegments.push(6);
+        appState.completedSegments.sort((a, b) => a - b);
+      }
+      drawCertificateCanvas();
+      updateProgressUI();
+      updateCertificateVisibility();
+      saveState();
+
+      if (!canvas) return;
+      const safeFileName = `Certificado-Medicina-Montuvia-${name.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, '').trim().replace(/\s+/g, '-')}.jpg`;
+
+      if (typeof canvas.toBlob === 'function') {
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = safeFileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(url), 4000);
+        }, 'image/jpeg', 0.95);
+      } else {
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = safeFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      if (msg) {
+        msg.textContent = `¡Descargando tu certificado JPG (${safeFileName})!`;
+        msg.className = `inline-msg is-success`;
+      }
+    }
+
+    function printCertificate() {
+      const input = document.getElementById('student-name-input');
+      const msg = document.getElementById('cert-status-msg');
+      const name = input ? input.value.trim() : '';
+
+      if (name.length < 3) {
+        if (msg) {
+          msg.textContent = `Escribe primero tu nombre completo antes de imprimir tu certificado.`;
+          msg.className = `inline-msg is-error`;
+        }
+        if (input) input.focus();
+        return;
+      }
+
+      appState.studentName = name;
+      if (!appState.completedSegments.includes(6)) {
+        appState.completedSegments.push(6);
+        appState.completedSegments.sort((a, b) => a - b);
+      }
+      drawCertificateCanvas();
+      updateProgressUI();
+      saveState();
+
+      if (typeof window.print === 'function') {
+        window.print();
+      } else if (msg) {
+        msg.textContent = `Tu navegador no permite imprimir directamente desde aquí. Usa el botón Descargar Certificado (JPG).`;
+        msg.className = `inline-msg`;
+      }
+    }
+
+    // --- SCROLL REVEAL ---
+    function initScrollReveal() {
+      const items = document.querySelectorAll('.reveal-item');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach((el) => el.classList.add('is-visible'));
+        return;
+      }
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      items.forEach((el) => observer.observe(el));
+    }
+
+    // --- INIT ---
+    async function initApp() {
+      await loadState();
+
+      selectProvince(appState.activeProvince || 'manabi');
+      filterHerbario(appState.activeFilter || 'todos');
+      renderQuest();
+      updateProgressUI();
+      updateCertificateVisibility();
+      initScrollReveal();
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          if (appState.quizPassed) drawCertificateCanvas();
+        });
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
